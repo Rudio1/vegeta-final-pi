@@ -31,5 +31,6 @@ Route::prefix('user')->group(function(){
 
 Route::prefix('product')->group(function(){
     Route::get('/{id}', [ProductController::class, 'findById']);
+    Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
 });
 

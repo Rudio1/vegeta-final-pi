@@ -29,4 +29,15 @@ class ProductController extends Controller
             return response()->json('Id informado não existe', 404);
         }
     }
+
+    public function deleteProduct($id){
+        try {
+            $product = Product::find($id);
+            $product->delete();
+
+            return response()->json('Produto deletado!', 200);
+        } catch (\Throwable $th) {
+            return response()->json('Id informado não existe', 404);
+        }
+    }
 }
