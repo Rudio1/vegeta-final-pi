@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+use App\Models\modelProduct;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -26,6 +28,7 @@ class ProductRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'price' => ['required', 'float'],
+            'model_id' => ['required', 'integer', Rule::in(array_column(modelProduct::all()->toArray(), 'id'))],
             'description' => ['required', 'string'],
         ];
     }

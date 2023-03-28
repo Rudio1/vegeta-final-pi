@@ -13,7 +13,7 @@ class modelProduct extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nome',
+        'name',
     ];
 
     public function class(){

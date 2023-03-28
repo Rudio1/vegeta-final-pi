@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\InittialController;
+use App\Http\Controllers\ProductController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +27,9 @@ Route::prefix('user')->group(function(){
     Route::delete('/{id}', [InittialController::class, 'deleteUser']);
     Route::post('/', [InittialController::class, 'createUser']);
     Route::put('/{id}', [InittialController::class, 'updateUser']);
+});
+
+Route::prefix('product')->group(function(){
+    Route::get('/{id}', [ProductController::class, 'findById']);
 });
 
