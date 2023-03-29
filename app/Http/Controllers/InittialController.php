@@ -21,7 +21,7 @@ class InittialController extends Controller
                 $User->email
             ];
         } catch (\Throwable $th) {
-            return response()->json('Id invalido', 404);
+            return response()->json('Id invalido', 422);
         }
     }
 
@@ -31,16 +31,14 @@ class InittialController extends Controller
             $User->delete();
             return response()->json('Usuario deletado com sucesso!', 200);
         } catch (\Throwable $th) {
-            return response()->json('Id informado não existe', 404);
+            return response()->json('Id informado não existe', 422);
         }
     }
 
     public function createUser(UserRequest $request){
         $password = $request->password;
-        // dd($request->password_confirmed);
         
         if($password == $request->password_confirmed){
-            dd($password);
             $User =User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -51,7 +49,7 @@ class InittialController extends Controller
             }
             
         }
-        return response()->json('As senhas devem ser iguais', 404);
+        return response()->json('As senhas devem ser iguais', 422);
     }
 
     public function updateUser(PutUsers $request, $id){
@@ -59,7 +57,7 @@ class InittialController extends Controller
         
         $User = User::findorfail($id);
         if(!$User){
-            return response()->json('Id invalido', 404);
+            return response()->json('Id invalido', 422);
         }
         $User->name = $request->input('name') ?: $User->name; 
         $User->email = $request->input('email') ?: $User->email; 

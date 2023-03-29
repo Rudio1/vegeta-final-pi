@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
-use App\Models\modelProduct;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -15,9 +15,8 @@ class ProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,7 +26,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'price' => ['required', 'float'],
+            'price' => ['required', 'numeric'],
             'description' => ['required', 'string'],
             'product_image' => ['image'],
         ];
@@ -35,6 +34,17 @@ class ProductRequest extends FormRequest
 
     public function messages()
     {
-
+        return [
+            'name.required' => 'Informe o nome',
+            'price.required' => 'Informe o preço',
+            'description.required' => 'Informe a descrição',
+            'product_image.image' => 'O arquivo enviado precisa ser uma imagem',
+        ];
     }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
+    }
+
 }
