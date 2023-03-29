@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\modelProduct;
 use App\Models\Product;
-use Illuminate\Http\Request;
+
 
 class ProductController extends Controller
 {
     public function findById($id){
-        $models = modelProduct::join('products', 'models.id', '=', 'products.model_id')
-        ->select('models.name')
-        ->get();
-
-        foreach ($models as $model ) {
-            $modelName = $model['name']; 
-        }
         try {
             $product = Product::find($id);
 
             return [
                 $product->name,
                 $product->price,
-                $modelName,
-                $product->description
+                $product->description,
+                $product->product_image
             ];
         } catch (\Throwable $th) {
             return response()->json('Id informado não existe', 404);
@@ -40,4 +34,14 @@ class ProductController extends Controller
             return response()->json('Id informado não existe', 404);
         }
     }
+
+    public function updateProduct(ProductRequest $request, $id){
+
+    }
+
+    public function createProduct(ProductRequest $request){
+        
+    }
+
+
 }

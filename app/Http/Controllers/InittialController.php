@@ -37,34 +37,36 @@ class InittialController extends Controller
 
     public function createUser(UserRequest $request){
         $password = $request->password;
-        $User = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($password),
-        ]);
+        // dd($request->password_confirmed);
         
-        if($User){
-            return response()->json('Usuario criado com sucesso!', 200); 
+        if($password == $request->password_confirmed){
+            dd($password);
+            $User =User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($password),
+            ]);                
+            if($User){
+                return response()->json('Usuario criado com sucesso!', 200); 
+            }
+            
         }
-        return response()->json('Não foi possivel criar o usuario', 404);
+        return response()->json('As senhas devem ser iguais', 404);
     }
 
     public function updateUser(PutUsers $request, $id){
-        $User = User::find($id);
+
+        
+        $User = User::findorfail($id);
         if(!$User){
             return response()->json('Id invalido', 404);
         }
+        $User->name = $request->input('name') ?: $User->name; 
+        $User->email = $request->input('email') ?: $User->email; 
+        $User->password = $request->input('password')?: bcrypt($User->password);
+        $User->save();
         
-        try {
-            $User->name = $request->input('name') ?: $User->name; 
-            $User->email = $request->input('email') ?: $User->email; 
-            $User->password = $request->input('password')?: bcrypt($User->password);
-            $User->save();
-            
-            return response()->json('Usuario atualizado com sucesso!', 200);
-        } catch (\Throwable $th) {
-            return response()->json('Informe os campos que deseja alterar', 404);
-        }
+        return response()->json('Usuario atualizado com sucesso!', 200);
         
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,8 +33,14 @@ class PutUsers extends FormRequest
         return [
             'nome.string' => 'O nome precisa ser uma string',
             'email.unique' => 'Este e-mail já esta cadastrado',
+            'email.required' => 'Informe um e-mail',
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];
         
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

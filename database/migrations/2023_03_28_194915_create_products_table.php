@@ -17,8 +17,8 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->float('price');
-            $table->foreignId('model_id')->constrained('models');
             $table->longtext('description');
+            $table->string('product_image');
             $table->timestamps();
         });
     }
