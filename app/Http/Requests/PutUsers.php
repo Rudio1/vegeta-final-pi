@@ -23,7 +23,7 @@ class PutUsers extends FormRequest
 
         return [
             'nome' => 'string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',Rule::unique('users')->ignore($userId),
+            'email' => 'string|email|max:255|unique:users,email',Rule::unique('users')->ignore($userId),
             'senha' => 'string|min:8',
         ];
     }
@@ -33,7 +33,6 @@ class PutUsers extends FormRequest
         return [
             'nome.string' => 'O nome precisa ser uma string',
             'email.unique' => 'Este e-mail já esta cadastrado',
-            'email.required' => 'Informe um e-mail',
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];
         
