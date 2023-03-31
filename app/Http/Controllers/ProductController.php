@@ -14,45 +14,47 @@ class ProductController extends Controller
     public function getAllProduct(){
         try {
             $products = Product::all();
+            if(!$products){
+                return response()->json('Nao existe produtos', 400);    
+            }
             return response()->json($products);
-        } catch (\Throwable $th) {
-            return response()->json('false', 422);
+        } catch (\Exception $th) {
+            return response()->json('error', 500);
         }
     }
 
     public function findById($id){
         try {
-            $product = Product::find($id);
-
-            return [
-                $product->name,
-                $product->price,
-                $product->description,
-                $product->product_image
-            ];
+            
+            $product = Product::findOrFail($id);
+            if(!$product){
+                return response()->json('id invalido', 422);
+            } 
+            return response()->json($product, 200);
         } catch (\Throwable $th) {
-            return response()->json('Id informado não existe', 422);
+            return response()->json('error', 500);
         }
     }
 
     public function deleteProduct($id){
         try {
-            $product = Product::find($id);
+            $product = Product::findOrfail($id);
+            if(!$product){
+                return response()->json('Id informado não existe', 422);
+            }
             $product->delete();
-
             return response()->json('Produto deletado!', 200);
         } catch (\Throwable $th) {
-            return response()->json('Id informado não existe', 422);
+            return response()->json('error', 500);
         }
     }
 
     public function updateProduct(PutProduct $request, $id){
-
-        if($request->all() == []){
-            return response()->json('Informe ao menos um campo à ser atualizado', 422);
-        }
         try {
             $product = Product::findOrFail($id);
+            if($request->all() == []){
+                return response()->json('Informe ao menos um campo à ser atualizado', 422);
+            }
             $product->name = $request->input('name') ?: $product->name;
             $product->price = $request->input('price') ?: $product->price;
             $product->description = $request->input('description') ?: $product->description;
@@ -61,26 +63,23 @@ class ProductController extends Controller
             $product->save();
             return response()->json('Produto atualizado com sucesso', 200);
         } catch (\Throwable $th) {
-            return response()->json('Id invalido', 422);
+            return response()->json('error', 500);
         }
     }
 
     public function createProduct(ProductRequest $request){
-
-        $extensao = $request->file('product_image')->extension();
-        $nome = explode('.', $request->file('product_image')->getClientOriginalName());
-        $nomeArquivo = uniqid(date('HisYmd') . $nome[0]);
-        $nomeArquivo = "{$nome[0]}.{$extensao}";
-        $upload = $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
-        
         try {
+            $extensao = $request->file('product_image')->extension();
+            $nome = explode('.', $request->file('product_image')->getClientOriginalName());
+            $nomeArquivo = uniqid(date('HisYmd') . $nome[0]);
+            $nomeArquivo = "{$nome[0]}.{$extensao}";
+            $upload = $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
             $product = Product::create([
                 'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
                 'product_image' => $nomeArquivo
             ]);
-
             $product->save();
             return response()->json('Produto criado com sucesso!', 200);
         } catch (\Throwable $th) {
