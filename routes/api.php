@@ -30,6 +30,7 @@ Route::prefix('user')->group(function(){
 });
 
 Route::prefix('product')->group(function(){
+    Route::get('/', [ProductController::class, 'getAllProduct']);
     Route::get('/{id}', [ProductController::class, 'findById']);
     Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
     Route::post('/createProduct', [ProductController::class, 'createProduct']);

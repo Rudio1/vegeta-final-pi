@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'name' => ['required', 'string'],
             'price' => ['required', 'numeric'],
             'description' => ['required', 'string'],
-            'product_image' => ['image'],
+            'product_image' => ['file'],
         ];
     }
 
@@ -38,7 +38,7 @@ class ProductRequest extends FormRequest
             'name.required' => 'Informe o nome',
             'price.required' => 'Informe o preço',
             'description.required' => 'Informe a descrição',
-            'product_image.image' => 'O arquivo enviado precisa ser uma imagem',
+            'product_image.file' => 'O arquivo enviado precisa ser uma imagem',
         ];
     }
 
