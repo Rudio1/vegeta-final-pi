@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
             'name' => ['required', 'string'],
             'email' => ['required', 'unique:users'],
             'password' => ['required', 'string'],
-            'password_confirmed' => ['required', 'string'],
+            'password_confirmed' => ['required', 'string', 'confirmed'],
         ];
     }
 
@@ -47,6 +47,7 @@ class UserRequest extends FormRequest
             'password.min' => 'A senha precisa ter no minimo 8 digitos', 
             'password.required' => 'A senha é obrigatoria',
             'password_confirmed.required' => 'Você deve confirmar sua senha',
+            'password_confirmed.confirmed' => 'As senhas devem ser iguais',
         ];
         
     }

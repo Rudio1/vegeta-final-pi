@@ -13,58 +13,63 @@ class InittialController extends Controller
         
     }
 
-    public function findById($id){
+    public function findById(int $id){
         try {
             $User = User::find($id);
-            return [
-                $User->name,
-                $User->email
-            ];
+
+            if(!$User){
+                return response()->json('Id invalido', 422);    
+            }
+            return response()->json($User, 200);
+            
         } catch (\Throwable $th) {
-            return response()->json('Id invalido', 422);
+            return response()->json('false', 500);
         }
     }
 
-    public function deleteUser($id){
-        $User = User::find($id);
+    public function deleteUser(int $id){
         try {
+            $User = User::find($id);
+            if(!$User) {
+                return response()->json('Id informado não existe', 422);
+            }
+
             $User->delete();
-            return response()->json('Usuario deletado com sucesso!', 200);
+            return response()->json('Usuario deletado com sucesso!', 204);
         } catch (\Throwable $th) {
-            return response()->json('Id informado não existe', 422);
+            return response()->json('false', 500);
         }
     }
 
     public function createUser(UserRequest $request){
-        $password = $request->password;
-        
-        if($password == $request->password_confirmed){
-            $User =User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($password),
-            ]);                
-            if($User){
-                return response()->json('Usuario criado com sucesso!', 200); 
-            }
-            
+        try {
+                $User =User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password),
+                ]);                
+                return response()->json($User, 200); 
+        } catch (\Throwable $th) {
+            return response()->json('false', 500);
         }
-        return response()->json('As senhas devem ser iguais', 422);
     }
 
-    public function updateUser(PutUsers $request, $id){
+    public function updateUser(PutUsers $request, int $id){
 
-        
-        $User = User::findorfail($id);
-        if(!$User){
-            return response()->json('Id invalido', 422);
+        try {
+            $User = User::findorfail($id);
+            if(!$User){
+                return response()->json('Id invalido', 422);
+            }
+            $User->name = $request->input('name') ?: $User->name; 
+            $User->email = $request->input('email') ?: $User->email; 
+            $User->password = $request->input('password')?: bcrypt($User->password);
+            $User->save();
+
+            return response()->json($User, 201);
+        } catch (\Throwable $th) {
+            return response()->json('false', 500);
         }
-        $User->name = $request->input('name') ?: $User->name; 
-        $User->email = $request->input('email') ?: $User->email; 
-        $User->password = $request->input('password')?: bcrypt($User->password);
-        $User->save();
-        
-        return response()->json('Usuario atualizado com sucesso!', 200);
         
     }
 }
