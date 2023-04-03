@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Categorias;
 
-class CategoriasSeed extends Seeder
+use Illuminate\Database\Seeder;
+use App\Models\Category;
+
+class CategorySeed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,33 +17,33 @@ class CategoriasSeed extends Seeder
     {
         $categoriasJson = '[
             {
-                "nome": "Sugestão"
+                "name": "Sugestão"
             },
             {
-                "nome": "Solicitação de Garantia"
+                "name": "Solicitação de Garantia"
             },
             {
-                "nome": "Dúvidas"
+                "name": "Dúvidas"
             },
             {
-                "nome": "Problemas estruturais"
+                "name": "Problemas estruturais"
             },
             {
-                "nome": "Problemas com software"
+                "name": "Problemas com software"
             },
             {
-                "nome": "Problemas do APP"
+                "name": "Problemas do APP"
             },
             {
-                "nome": "Outros"
+                "name": "Outros"
             }
         ]';
 
         $categorias = json_decode($categoriasJson);
 
         foreach ($categorias as $categoria) {
-            Categorias::updateOrCreate(
-                ['nome' => $categoria->nome]
+            Category::updateOrCreate(
+                ['name' => $categoria->name]
             );
         }
     }

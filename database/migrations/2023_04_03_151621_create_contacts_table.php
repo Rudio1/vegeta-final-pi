@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriaFaleConosco extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateCategoriaFaleConosco extends Migration
      */
     public function up()
     {
-        Schema::create('categoria_fale_conosco', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
+            $table->string('name');
+            $table->foreignId('category_id')->contstrained('category');
+            $table->longtext('description');
         });
     }
 
@@ -26,6 +28,6 @@ class CreateCategoriaFaleConosco extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categoria_fale_conosco');
+        Schema::dropIfExists('contacts');
     }
 }
