@@ -23,7 +23,7 @@ class ProductController extends Controller
         }
     }
 
-    public function findById($id){
+    public function findById(int $id){
         try {
             
             $product = Product::findOrFail($id);
@@ -36,7 +36,7 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct(int $id){
         try {
             $product = Product::findOrfail($id);
             if(!$product){
@@ -49,7 +49,7 @@ class ProductController extends Controller
         }
     }
 
-    public function updateProduct(PutProduct $request, $id){
+    public function updateProduct(PutProduct $request, int $id){
         try {
             $product = Product::findOrFail($id);
             if($request->all() == []){
@@ -74,6 +74,7 @@ class ProductController extends Controller
             $nomeArquivo = uniqid(date('HisYmd') . $nome[0]);
             $nomeArquivo = "{$nome[0]}.{$extensao}";
             $upload = $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
+            
             $product = Product::create([
                 'name' => $request->name,
                 'price' => $request->price,
