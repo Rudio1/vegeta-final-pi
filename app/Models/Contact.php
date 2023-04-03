@@ -19,11 +19,7 @@ class Contact extends Model
     ];
 
     public $timestamps = false;
-
-    // function __construct(){
-    //     dd('a');
-    // }
-
+    
     public function category(){
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }

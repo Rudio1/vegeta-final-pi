@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
             'name' => ['required', 'string'],
             'email' => ['required', 'unique:users'],
             'password' => ['required', 'string'],
-            'password_confirmed' => ['required', 'string', 'confirmed'],
+            'password_confirmed' => 'required|same:password'
         ];
     }
 

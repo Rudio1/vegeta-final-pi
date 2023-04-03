@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PutUsers;
 use App\Http\Requests\UserRequest;
+use App\Mail\sendMailRegister;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class InittialController extends Controller
@@ -42,15 +44,19 @@ class InittialController extends Controller
     }
 
     public function createUser(UserRequest $request){
+        $text = 'Confirmando login';
+        $content = 'Bem vindo ao nosso App';
         try {
-                $User =User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => bcrypt($request->password),
-                ]);                
-                return response()->json($User, 200); 
+            $User =User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+
+                Mail::to($request->email)->send(new sendMailRegister($text, $content));
+                return response()->json('Email enviado' . $User, 200); 
         } catch (\Throwable $th) {
-            return response()->json('false', 500);
+            return response()->json($th->getMessage(), 500);
         }
     }
 
