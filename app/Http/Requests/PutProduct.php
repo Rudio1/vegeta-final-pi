@@ -28,20 +28,16 @@ class PutProduct extends FormRequest
         //Falta definir os tipos de validação a serem feitas.
 
         return [
-            'name' => ['string'],
-            'price' => ['float'],            
-            'description' => ['string'],
-            'product_image' => ['image']
+            'name' => 'string|max:255',
+            'price' => 'string|min:15|max:255',            
+            'description' => 'string|min:15',
+            'product_image' => 'max:10240|mimes:jpg,png,svg,jpeg'
         ];
     }
 
     public function messages()
     {
         return [
-            'name.string' => 'Informe um nome valido',
-            'price.float' => 'O preço precisa ser um número',
-            'description.string' => 'Informe uma descrição valida',
-            'product_image.image' => 'O arquivo de imagem está no formato incorreto'
         ];
         
     }

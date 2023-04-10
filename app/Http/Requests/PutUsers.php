@@ -31,7 +31,7 @@ class PutUsers extends FormRequest
     public function messages()
     {
         return [
-            'nome.string' => 'O nome precisa ser uma string',
+            'nome.max' => 'Informe um nome valido',
             'email.unique' => 'Este e-mail já esta cadastrado',
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];

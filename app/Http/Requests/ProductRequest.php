@@ -25,10 +25,10 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'description' => ['required', 'string'],
-            'product_image' => ['file'],
+            'name' => 'required|string|max:255',
+            'price' => 'required|string|min:15|max:255',            
+            'description' => 'required|string|min:15',
+            'product_image' => 'required|max:10240|mimes:jpg,png,svg,jpeg'
         ];
     }
 
@@ -38,7 +38,7 @@ class ProductRequest extends FormRequest
             'name.required' => 'Informe o nome',
             'price.required' => 'Informe o preço',
             'description.required' => 'Informe a descrição',
-            'product_image.file' => 'O arquivo enviado precisa ser uma imagem',
+            'product_image.required' => 'Informe a imagem',
         ];
     }
 
