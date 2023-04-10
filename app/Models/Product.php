@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $table = 'products';
-    public $timestamps = false;
+    public $timestamps = true;
 
 
 
@@ -18,5 +18,6 @@ class Product extends Model
         'name',
         'price',
         'description',
+        'product_image'
     ];
 }

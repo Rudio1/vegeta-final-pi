@@ -8,15 +8,13 @@ use App\Http\Requests\PutProduct;
 use Intervention\Image\Facades\Image;
 use App\Models\Product;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
     public function getAllProduct(){
         try {
             $products = Product::all();
-            if(!$products){
-                return response()->json('Nao existe produtos', 400);    
-            }
             return response()->json($products);
         } catch (\Exception $th) {
             return response()->json('error', 500);
@@ -25,11 +23,7 @@ class ProductController extends Controller
 
     public function findById(int $id){
         try {
-            
             $product = Product::findOrFail($id);
-            if(!$product){
-                return response()->json('id invalido', 422);
-            } 
             return response()->json($product, 200);
         } catch (\Throwable $th) {
             return response()->json('error', 500);
@@ -38,7 +32,7 @@ class ProductController extends Controller
 
     public function deleteProduct(int $id){
         try {
-            $product = Product::findOrfail($id);
+            $product = Product::find($id);
             if(!$product){
                 return response()->json('Id informado não existe', 422);
             }
@@ -73,7 +67,7 @@ class ProductController extends Controller
             $nome = explode('.', $request->file('product_image')->getClientOriginalName());
             $nomeArquivo = uniqid(date('HisYmd') . $nome[0]);
             $nomeArquivo = "{$nome[0]}.{$extensao}";
-            $upload = $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
+            $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
             
             $product = Product::create([
                 'name' => $request->name,
@@ -84,7 +78,7 @@ class ProductController extends Controller
             $product->save();
             return response()->json('Produto criado com sucesso!', 200);
         } catch (\Throwable $th) {
-            return response()->json('Não foi possivel adicionar o produto', 414);
+            return response()->json($th->getMessage(), 400);
         }
         
 
