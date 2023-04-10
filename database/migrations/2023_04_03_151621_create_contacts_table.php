@@ -16,7 +16,7 @@ class CreateContactsTable extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('category_id')->contstrained('category');
+            $table->foreignId('category_id')->constrained('category');
             $table->longtext('description');
         });
     }
@@ -28,6 +28,9 @@ class CreateContactsTable extends Migration
      */
     public function down()
     {
+        Schema::table('contacts', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+        });
         Schema::dropIfExists('contacts');
     }
 }
