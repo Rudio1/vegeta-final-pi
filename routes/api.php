@@ -27,6 +27,7 @@ Route::prefix('user')->group(function(){
     Route::delete('/{id}', [InittialController::class, 'deleteUser']);
     Route::post('/', [InittialController::class, 'createUser']);
     Route::put('/{id}', [InittialController::class, 'updateUser']);
+    Route::post('/login', [InittialController::class, 'login']);
 });
 
 Route::prefix('product')->group(function(){
@@ -35,8 +36,11 @@ Route::prefix('product')->group(function(){
     Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
     Route::post('/createProduct', [ProductController::class, 'createProduct']);
     Route::put('/{id}', [ProductController::class, 'updateProduct']);
+    Route::post('/comments', [ProductController::class, 'newComment']);
 });
 
 Route::prefix('contact')->group(function(){
-    Route::post('/send-contact', [ContactController::class, 'sendContatc']);
+    Route::post('/send-contact', [ContactController::class, 'sendContact']);
 });
+
+

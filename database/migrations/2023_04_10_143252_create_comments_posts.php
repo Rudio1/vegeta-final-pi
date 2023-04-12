@@ -17,7 +17,10 @@ class CreateCommentsPosts extends Migration
             $table->id();
             $table->longtext('comment');
             $table->Integer('assessment');
-            $table->foreignId('email_user')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
+            $table->integer('count_assessment');
+            $table->float('avg_assessment', 8,2);
+            $table->foreignId('product_id')->constrained('products');
             $table->timestamps();
         });
     }
@@ -29,7 +32,8 @@ class CreateCommentsPosts extends Migration
     public function down()
     {
         Schema::table('comments_posts', function (Blueprint $table) {
-            $table->dropForeign(['email_user']);
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['product_id']);
         });
         Schema::dropIfExists('comments_posts');
     }

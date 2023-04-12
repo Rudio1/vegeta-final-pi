@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Request;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PutProduct;
-use Intervention\Image\Facades\Image;
 use App\Models\Product;
-
-use function PHPUnit\Framework\isEmpty;
-
+use App\Models\Comments;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
-    public function getAllProduct(){
+    public function getAllProduct() : JsonResponse{
         try {
             $products = Product::all();
             return response()->json($products);
@@ -21,7 +21,7 @@ class ProductController extends Controller
         }
     }
 
-    public function findById(int $id){
+    public function findById(int $id) : JsonResponse{
         try {
             $product = Product::findOrFail($id);
             return response()->json($product, 200);
@@ -30,7 +30,7 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteProduct(int $id){
+    public function deleteProduct(int $id): JsonResponse{
         try {
             $product = Product::find($id);
             if(!$product){
@@ -43,7 +43,7 @@ class ProductController extends Controller
         }
     }
 
-    public function updateProduct(PutProduct $request, int $id){
+    public function updateProduct(PutProduct $request, int $id) :  JsonResponse{
         try {
             $product = Product::findOrFail($id);
             if($request->all() == []){
@@ -61,7 +61,7 @@ class ProductController extends Controller
         }
     }
 
-    public function createProduct(ProductRequest $request){
+    public function createProduct(ProductRequest $request) :  JsonResponse{
         try {
             $extensao = $request->file('product_image')->extension();
             $nome = explode('.', $request->file('product_image')->getClientOriginalName());
@@ -79,11 +79,28 @@ class ProductController extends Controller
             return response()->json('Produto criado com sucesso!', 200);
         } catch (\Throwable $th) {
             return response()->json($th->getMessage(), 400);
+        }    
+    }
+
+    public function newComment(CommentRequest $request): JsonResponse{
+        try {
+            $user = User::where('email', $request->email_user)->firstOrFail();
+            $email_user_id = $user->id;
+
+            $countAssessment = DB::table('comments_posts')->count('assessment');
+            $comment = Comments::create([
+                'comment' => $request->comment,
+                'assessment' => $request->assessment,
+                'user_id' => $email_user_id, 
+                'product_id' => 1,  
+                'count_assessment' => $countAssessment,
+                'avg_assessment' => 2,
+            ]);
+
+            $comment->save();
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
         }
-        
-
-
-
     }
 
 

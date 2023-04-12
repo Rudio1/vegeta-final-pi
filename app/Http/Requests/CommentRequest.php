@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProductRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,6 +18,7 @@ class ProductRequest extends FormRequest
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,20 +27,18 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'price' => 'required|string|max:255',            
-            'description' => 'required|string|min:15',
-            'product_image' => 'required|max:10240|mimes:jpg,png,svg,jpeg'
+            'comment' => 'required|string|max:255',
+            'assessment' => 'required',
+            'email_user' => 'required|email', Rule::exists('users', 'email'),
+            'product_id' => 'required|integer', Rule::exists('products', 'id'),
         ];
     }
-
     public function messages()
     {
         return [
-            'name.required' => 'Informe o nome',
-            'price.required' => 'Informe o preço',
-            'description.required' => 'Informe a descrição',
-            'product_image.required' => 'Informe a imagem',
+            'comment.required' => 'Informe o comentario',
+            'assessment.required' => 'Informe a avaliação',
+            'email_user.required' => 'informe o email',
         ];
     }
 
@@ -46,5 +46,4 @@ class ProductRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json($validator->errors()));
     }
-
 }

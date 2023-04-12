@@ -6,8 +6,8 @@ use App\Http\Requests\PutUsers;
 use App\Http\Requests\UserRequest;
 use App\Mail\sendMailRegister;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class InittialController extends Controller
 {
@@ -15,7 +15,7 @@ class InittialController extends Controller
         
     }
 
-    public function findById(int $id){
+    public function findById(int $id): JsonResponse{
         try {
             $User = User::find($id);
 
@@ -29,7 +29,7 @@ class InittialController extends Controller
         }
     }
 
-    public function deleteUser(int $id){
+    public function deleteUser(int $id): JsonResponse{
         try {
             $User = User::find($id);
             if(!$User) {
@@ -43,7 +43,7 @@ class InittialController extends Controller
         }
     }
 
-    public function createUser(UserRequest $request){
+    public function createUser(UserRequest $request): JsonResponse{
         $text = 'Confirmando login';
         $content = 'Bem vindo ao nosso App';
         try {
@@ -60,7 +60,7 @@ class InittialController extends Controller
         }
     }
 
-    public function updateUser(PutUsers $request, int $id){
+    public function updateUser(PutUsers $request, int $id) : JsonResponse{
 
         try {
             $User = User::findorfail($id);

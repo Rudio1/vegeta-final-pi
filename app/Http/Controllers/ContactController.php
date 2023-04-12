@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
 
 class ContactController extends Controller
 {
-    public function sendContatc(ContactRequest $request){
+    public function sendContact(ContactRequest $request) : JsonResponse{
         try {
             $contact = Contact::create([
                 'name' => $request->name,
