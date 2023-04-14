@@ -15,7 +15,7 @@ class Comments extends Model
     protected $fillable = [
         'comment',
         'assessment',
-        'email_user',
+        'user_id',
         'product_id',
         'count_assessment',
         'avg_assessment'
@@ -28,6 +28,6 @@ class Comments extends Model
     }
 
     public function productForeign(){
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'name');
     }
 }

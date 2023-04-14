@@ -12,12 +12,14 @@ class Product extends Model
     protected $table = 'products';
     public $timestamps = true;
 
-
-
     protected $fillable = [
         'name',
         'price',
         'description',
         'product_image'
     ];
+
+    public function comments(){
+        return $this->hasMany(Comments::class);
+    }
 }

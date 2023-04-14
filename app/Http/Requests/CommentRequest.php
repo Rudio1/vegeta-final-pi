@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 
 class CommentRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +31,7 @@ class CommentRequest extends FormRequest
             'comment' => 'required|string|max:255',
             'assessment' => 'required',
             'email_user' => 'required|email', Rule::exists('users', 'email'),
-            'product_id' => 'required|integer', Rule::exists('products', 'id'),
+            'product_name' => 'required|string', Rule::exists('products', 'name'),
         ];
     }
     public function messages()
@@ -39,11 +40,12 @@ class CommentRequest extends FormRequest
             'comment.required' => 'Informe o comentario',
             'assessment.required' => 'Informe a avaliação',
             'email_user.required' => 'informe o email',
+            'product_name' => 'Informe o nome do produto'
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json($validator->errors()));
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

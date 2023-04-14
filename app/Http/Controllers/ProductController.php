@@ -8,6 +8,7 @@ use App\Http\Requests\PutProduct;
 use App\Models\Product;
 use App\Models\Comments;
 use App\Models\User;
+use Egulias\EmailValidator\Warning\Comment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
@@ -25,7 +26,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             return response()->json($product, 200);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return response()->json('error', 500);
         }
     }
@@ -38,7 +39,7 @@ class ProductController extends Controller
             }
             $product->delete();
             return response()->json('Produto deletado!', 200);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return response()->json('error', 500);
         }
     }
@@ -56,7 +57,7 @@ class ProductController extends Controller
         
             $product->save();
             return response()->json('Produto atualizado com sucesso', 200);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return response()->json('error', 500);
         }
     }
@@ -77,7 +78,7 @@ class ProductController extends Controller
             ]);
             $product->save();
             return response()->json('Produto criado com sucesso!', 200);
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             return response()->json($th->getMessage(), 400);
         }    
     }
@@ -85,21 +86,36 @@ class ProductController extends Controller
     public function newComment(CommentRequest $request): JsonResponse{
         try {
             $user = User::where('email', $request->email_user)->firstOrFail();
-            $email_user_id = $user->id;
+            $product = Product::where('name', $request->product_name)->firstOrFail();
+            $maxAssessment = Comments::where('product_id', $product->id)->max('count_assessment');
+            $countAssessment = $maxAssessment ? $maxAssessment + 1 : 1;
 
-            $countAssessment = DB::table('comments_posts')->count('assessment');
             $comment = Comments::create([
                 'comment' => $request->comment,
                 'assessment' => $request->assessment,
-                'user_id' => $email_user_id, 
-                'product_id' => 1,  
+                'user_id' => $user->id, 
+                'product_id' => $product->id,  
                 'count_assessment' => $countAssessment,
-                'avg_assessment' => 2,
+                'avg_assessment' => (($product->comments()->avg('assessment') * $product->comments()->count()) + $request->assessment) / ($product->comments()->count() + 1),
             ]);
 
             $comment->save();
+            return response()->json('Comentario adicionado', 200);
         } catch (\Exception $th) {
             return response()->json($th->getMessage(), 400);
+        }
+    }
+
+    public function deleteComment($id): JsonResponse {
+        try {
+            $comment = Comment::findOrFail($id);
+            if(!$comment){
+                return response()->json('Id informado não existe', 422);
+            }
+            $comment->delete();
+            return response()->json('Comentario deletado', 200);
+        } catch (\Exception $th) {
+            return response()->json('error', 500);
         }
     }
 

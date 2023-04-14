@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
     {
         $usersJson = '[
             {
-                "name": "Admin",
-                "email": "admin@codenapp.com",
-                "password": "$2y$10$T.qxI7j4YnETDGk1gHEi3uRIROwGvNMrlvWVspNj3lhr1RobQ33aa"
+                "name": "guilherme",
+                "email": "guilhermerudio@gmail.com",
+                "password": "teste"
             }
         ]';
 
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             User::updateOrCreate(
                 ['name' => $user->name],
-                ['email' => $user->email, 'password' => $user->password],
+                ['email' => $user->email, 'password' => bcrypt($user->password)],
             );
         }
     }
