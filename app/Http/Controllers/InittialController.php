@@ -44,16 +44,15 @@ class InittialController extends Controller
     }
 
     public function createUser(UserRequest $request): JsonResponse{
-        $text = 'Confirmando login';
-        $content = 'Bem vindo ao nosso App';
+        $nameUser = $request->name;
         try {
             $User =User::create([
-                'name' => $request->name,
+                'name' => $nameUser,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
 
-                Mail::to($request->email)->send(new sendMailRegister($text, $content));
+                Mail::to($request->email)->send(new sendMailRegister($nameUser));
                 return response()->json('Email enviado' . $User, 200); 
         } catch (\Throwable $th) {
             return response()->json($th->getMessage(), 500);

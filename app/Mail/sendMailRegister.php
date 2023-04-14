@@ -11,17 +11,16 @@ class sendMailRegister extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $text;
-    public $content;
+    public $userName;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($text, $content)
+    public function __construct(string $userName)
     {
-        $this->text = $text;
-        $this->content = $content;
+        $this->userName = $userName;
+    
     }
 
     /**
@@ -31,6 +30,6 @@ class sendMailRegister extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->text)->view('emails.meuemail', ['conteudo' => $this->content]);
+        return $this->view('emails.meuemail', ['name' => $this->userName]);
     }
 }
