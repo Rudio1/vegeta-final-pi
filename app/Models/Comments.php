@@ -24,10 +24,10 @@ class Comments extends Model
     public $timestamps = true;
     
     public function userforeign(){
-        return $this->belongsTo(User::class, 'email_user', 'email');
+        return $this->hasMany(User::class, 'email_user', 'email');
     }
 
     public function productForeign(){
-        return $this->belongsTo(Product::class, 'product_id', 'name');
+        return $this->hasMany(Product::class, 'product_id', 'name');
     }
 }

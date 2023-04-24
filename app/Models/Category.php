@@ -19,6 +19,6 @@ class Category extends Model
     public $timestamps = false;
 
     public function contact(){
-        return $this->hasMany(Contact::class);
+        return $this->belongsTo(Contact::class);
     }
 }

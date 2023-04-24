@@ -20,10 +20,10 @@ class ProductSelled extends Model
     ];
 
     public function users(){
-        return $this->hasMany(User::class());
+        return $this->hasMany(User::class);
     }
 
     public function products(){
-        return $this->hasMany(Product::class());
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }
