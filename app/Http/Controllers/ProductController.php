@@ -20,7 +20,7 @@ class ProductController extends Controller
             $products = Product::all();
             return response()->json($products);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -29,7 +29,7 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             return response()->json($product, 200);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
             $product->delete();
             return response()->json('Produto deletado!', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -60,7 +60,7 @@ class ProductController extends Controller
             $product->save();
             return response()->json('Produto atualizado com sucesso', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -117,7 +117,7 @@ class ProductController extends Controller
             $comment->delete();
             return response()->json('Comentario deletado', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -128,7 +128,7 @@ class ProductController extends Controller
 
             return response()->json($product);
         } catch (\Exception $th) {
-            return response()->json('error', 500);
+            return response()->json('error', 400);
         }
     }
 
@@ -156,7 +156,7 @@ class ProductController extends Controller
             return response()->json($selledProduct, 200);
 
         } catch (\Exception $th) {
-            return response()->json($th, 500);
+            return response()->json($th, 400);
         }
     }
 

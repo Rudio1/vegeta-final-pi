@@ -24,8 +24,8 @@ class InittialController extends Controller
             }
             return response()->json($User, 200);
             
-        } catch (\Throwable $th) {
-            return response()->json('false', 500);
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -38,8 +38,8 @@ class InittialController extends Controller
 
             $User->delete();
             return response()->json('Usuario deletado com sucesso!', 204);
-        } catch (\Throwable $th) {
-            return response()->json('false', 500);
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -54,8 +54,8 @@ class InittialController extends Controller
 
                 Mail::to($request->email)->send(new sendMailRegister($nameUser));
                 return response()->json('Email enviado' . $User, 200); 
-        } catch (\Throwable $th) {
-            return response()->json($th->getMessage(), 500);
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -72,8 +72,8 @@ class InittialController extends Controller
             $User->save();
 
             return response()->json($User, 201);
-        } catch (\Throwable $th) {
-            return response()->json('false', 500);
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
         }
         
     }
