@@ -18,29 +18,34 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::post('/sell', [ProductController::class, 'selledProducts']);
+Route::get('/selledProduct', [ProductController::class, 'selled']);
+Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function () {
         Route::get('/{id}', [InittialController::class, 'findById']);
-        Route::delete('/{id}', [InittialController::class, 'deleteUser']);
+        Route::delete('/{id}', [InittialController::class, 'deleteUser']); #x
         Route::post('/', [InittialController::class, 'createUser']);
         Route::put('/{id}', [InittialController::class, 'updateUser']);
     });
     Route::prefix('product')->group(function () {
-        Route::get('/getAllProduct', [ProductController::class, 'getAllProduct']);
         Route::get('/{id}', [ProductController::class, 'findById']);
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
         Route::post('/createProduct', [ProductController::class, 'createProduct']);
         Route::put('/{id}', [ProductController::class, 'updateProduct']);
         Route::post('/comments', [ProductController::class, 'newComment']);
         Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']);
+
     });
     
     Route::prefix('contact')->group(function () {
-        Route::post('/send-contact', [ContactController::class, 'sendContatc']);
+        Route::post('/send-contact', [ContactController::class, 'sendContact']);
     });
 });
 

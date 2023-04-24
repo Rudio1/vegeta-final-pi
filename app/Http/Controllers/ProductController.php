@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PutProduct;
+use App\Http\Requests\SelledProduct;
 use App\Models\Product;
+use DateTime;
 use App\Models\Comments;
+use App\Models\ProductSelled;
 use App\Models\User;
 use Egulias\EmailValidator\Warning\Comment;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     public function getAllProduct() : JsonResponse{
@@ -118,6 +120,47 @@ class ProductController extends Controller
             return response()->json('error', 500);
         }
     }
+
+    //Aqui irá retornar os produtos vendidos somente pelo user logado
+    public function sell() : JsonResponse{
+        try {
+            $product = ProductSelled::all();
+
+            return response()->json($product);
+        } catch (\Exception $th) {
+            return response()->json('error', 500);
+        }
+    }
+
+    public function selledProducts(SelledProduct $request) : JsonResponse {
+        $date = new DateTime();
+        $today = $date->format('Y-m-d');
+        try {
+            $user = User::where('email', $request->email_user)->first();
+            $product = Product::where('name', $request->product_name)->firstOrFail();
+
+            if(!$user){
+                return response()->json('Usuario invalido', 404);
+            }else if(!$product){
+                return response()->json('Produto invalido', 404);
+            }
+
+            $selledProduct = ProductSelled::create([
+                'product_id' => $product->id,
+                'user_id' => $user->id,
+                'buy_date' => $today,
+                'serie_number' => $request->number_serie,
+            ]);
+
+            $selledProduct->save();
+            return response()->json($selledProduct, 200);
+
+        } catch (\Exception $th) {
+            return response()->json($th, 500);
+        }
+    }
+
+    
 
 
 }
