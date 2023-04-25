@@ -4,6 +4,7 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\InittialController;
 use App\Http\Controllers\ProductController;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,14 +50,15 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 });
 
-Route::post('/login', function (Request $request) {
-    if (Auth::attempt($request->all()) == false) {
-        return response()->json('Usuário ou senha incorreto', 401);
-    }else{
+Route::post('/login', function (LoginRequest $request) {
+    if (Auth::attempt($request->only('email', 'password'))){
+        
         $user = Auth::user();
-        $token = $user->createToken('token');
-        return response()->json($token->plainTextToken);
+        $token = $user->createToken('token')->plainTextToken;
+        $cookie = cookie('jwt', $token, 60*24);
+        return response()->json('Sucess', 200)->withCookie($cookie);   
     }
+    return response()->json('Usuário ou senha incorreto', 401);    
 });
 
 
