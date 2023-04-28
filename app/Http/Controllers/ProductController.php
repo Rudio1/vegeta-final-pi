@@ -87,7 +87,7 @@ class ProductController extends Controller
 
     public function newComment(CommentRequest $request): JsonResponse{
         try {
-            $user = User::where('email', $request->email_user)->firstOrFail();
+            $user = auth()->user(); 
             $product = Product::where('name', $request->product_name)->firstOrFail();
             $maxAssessment = Comments::where('product_id', $product->id)->max('count_assessment');
             $countAssessment = $maxAssessment ? $maxAssessment + 1 : 1;
