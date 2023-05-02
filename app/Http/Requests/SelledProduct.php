@@ -29,6 +29,7 @@ class SelledProduct extends FormRequest
         return [
             'email_user' => 'required|email', Rule::exists('users', 'email'),
             'product_name' => 'required|string', Rule::exists('products', 'name'),
+            'number_serie' => 'int|required',
         ];
     }
 
@@ -36,7 +37,9 @@ class SelledProduct extends FormRequest
     {
         return  [
             'email_user.email' => 'Informe um e-mail valido',
+            'email_user.required' => 'Informe o e-mail',
             'product_name.required' => 'Informe o nome do produto',
+            'number_serie.required' => 'Informe o numero de serie',
         ];
     }
 

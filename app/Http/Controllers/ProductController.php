@@ -20,7 +20,7 @@ class ProductController extends Controller
             $products = Product::all();
             return response()->json($products);
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -29,7 +29,7 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             return response()->json($product, 200);
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
             $product->delete();
             return response()->json('Produto deletado!', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -60,7 +60,7 @@ class ProductController extends Controller
             $product->save();
             return response()->json('Produto atualizado com sucesso', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -117,18 +117,25 @@ class ProductController extends Controller
             $comment->delete();
             return response()->json('Comentario deletado', 200);
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
-    //Aqui irá retornar os produtos vendidos somente pelo user logado
-    public function sell() : JsonResponse{
-        try {
-            $product = ProductSelled::all();
 
-            return response()->json($product);
+    public function userProduct() : JsonResponse{
+        try {
+            $user = auth()->user();
+            $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id' )
+                            ->where('product_selleds.user_id', $user->id)
+                            ->select('products.*')
+                            ->get();
+            if(!$product->isEmpty()){
+                return response()->json($product, 200);
+            }else {
+                return response()->json('Você ainda não possui produtos', 400);
+            }            
         } catch (\Exception $th) {
-            return response()->json('error', 400);
+            return response()->json($th->getMessage(), 400);
         }
     }
 
@@ -136,15 +143,15 @@ class ProductController extends Controller
         $date = new DateTime();
         $today = $date->format('Y-m-d');
         try {
-            $user = User::where('email', $request->email_user)->first();
+            $user = User::where('email', $request->email_user)->firstOrFail();
             $product = Product::where('name', $request->product_name)->firstOrFail();
 
-            if(!$user){
-                return response()->json('Usuario invalido', 404);
-            }else if(!$product){
-                return response()->json('Produto invalido', 404);
+            if (ProductSelled::where('user_id', $user->id)
+                            ->where('product_id', $product->id)
+                            ->where('serie_number', $request->number_serie)
+                            ->exists()){
+                return response()->json('O produto já existe para o usuário', 400);    
             }
-
             $selledProduct = ProductSelled::create([
                 'product_id' => $product->id,
                 'user_id' => $user->id,
@@ -154,7 +161,6 @@ class ProductController extends Controller
 
             $selledProduct->save();
             return response()->json($selledProduct, 200);
-
         } catch (\Exception $th) {
             return response()->json($th, 400);
         }
