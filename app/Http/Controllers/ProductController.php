@@ -8,6 +8,7 @@ use App\Http\Requests\PutProduct;
 use App\Http\Requests\SelledProduct;
 use App\Models\Product;
 use DateTime;
+use GuzzleHttp\Psr7\Request;
 use App\Models\Comments;
 use App\Models\ProductSelled;
 use App\Models\User;
@@ -49,9 +50,6 @@ class ProductController extends Controller
     public function updateProduct(PutProduct $request, int $id) :  JsonResponse{
         try {
             $product = Product::findOrFail($id);
-            if($request->all() == []){
-                return response()->json('Informe ao menos um campo à ser atualizado', 422);
-            }
             $product->name = $request->input('name') ?: $product->name;
             $product->price = $request->input('price') ?: $product->price;
             $product->description = $request->input('description') ?: $product->description;
@@ -108,6 +106,19 @@ class ProductController extends Controller
         }
     }
 
+    public function updateComment(Request $request, $id) : JsonResponse {
+        try {
+            $comment = Comments::findOrFail($id);
+            $comment->comment = $request->input('comment') ?: $comment->comment;
+
+            $comment->save();
+            return response()->json('Comentario atualizado', 200);
+
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 400);
+        }
+    }
+
     public function deleteComment($id): JsonResponse {
         try {
             $comment = Comment::findOrFail($id);
@@ -120,7 +131,6 @@ class ProductController extends Controller
             return response()->json($th->getMessage(), 400);
         }
     }
-
 
     public function userProduct() : JsonResponse{
         try {
