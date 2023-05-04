@@ -26,19 +26,12 @@ class CategorySeed extends Seeder
                 "name": "Dúvidas"
             },
             {
-                "name": "Problemas estruturais"
-            },
-            {
-                "name": "Problemas com software"
-            },
-            {
-                "name": "Problemas do APP"
+                "name": "Problemas com funcionalidades"
             },
             {
                 "name": "Outros"
             }
         ]';
-
         $categorias = json_decode($categoriasJson);
 
         foreach ($categorias as $categoria) {

@@ -44,7 +44,7 @@ class ProductController extends Controller
         }
     }
 
-    public function updateProduct(PutProduct $request, int $id) :  JsonResponse{
+    public function updateProduct(Request $request, int $id) :  JsonResponse{
         try {
             $product = Product::findOrFail($id);
             $product->name = $request->input('name') ?: $product->name;
@@ -116,7 +116,7 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteComment($id): JsonResponse {
+    public function deleteComment(int $id): JsonResponse {
         try {
             $comment = Comment::findOrFail($id);
             $comment->delete();
@@ -126,7 +126,7 @@ class ProductController extends Controller
         }
     }
 
-    public function showComment(int $productId){
+    public function showComment(int $productId) : JsonResponse{
         try {
             $getComment = Comments::where('product_id', $productId)->get();
             $comments = [];
