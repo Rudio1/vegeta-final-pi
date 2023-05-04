@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/user', [UserController::class, 'createUser']);
-Route::post('/sell', [ProductController::class, 'selledProducts']);
+Route::post('/user', [UserController::class, 'createUser']); //Registre-se
+Route::post('/user/login', [UserController::class, 'login']);
 
 Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -37,17 +37,18 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
         Route::post('/createProduct', [ProductController::class, 'createProduct']);
         Route::put('/{id}', [ProductController::class, 'updateProduct']);
-        Route::post('/comments', [ProductController::class, 'newComment']);
         Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']);
-        Route::put('/comments/{id}', [ProductController::class, 'updateComment']);
+        Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
+        Route::post('/comments', [ProductController::class, 'newComment']); //Novo Comentario
+        Route::put('/comments/{id}', [ProductController::class, 'updateComment']); 
+        Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario
     });
     
     Route::prefix('contact')->group(function () {
-        Route::post('/send-contact', [ContactController::class, 'sendContact']);
+        Route::post('/send-contact', [ContactController::class, 'sendContact']); //contate-me
     });
 });
 
-Route::post('/user/login', [UserController::class, 'login']);
 
 
 
