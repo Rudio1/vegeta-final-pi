@@ -37,9 +37,6 @@ class ProductController extends Controller
     public function deleteProduct(int $id): JsonResponse{
         try {
             $product = Product::find($id);
-            if(!$product){
-                return response()->json('Id informado não existe', 422);
-            }
             $product->delete();
             return response()->json('Produto deletado!', 200);
         } catch (\Exception $th) {
@@ -86,9 +83,8 @@ class ProductController extends Controller
     public function newComment(CommentRequest $request): JsonResponse{
         try {
             $user = auth()->user(); 
-            $comment = new Comment();
-            $product = $comment->productForeign()->where('name', $request->product_name)->firstOrFail();
-            $maxAssessment = $product->comments()->max('count_assessment');
+            $product = Product::where('name', $request->product_name)->firstOrFail();
+            $maxAssessment = Comments::where('product_id', $product->id)->max('count_assessment');
             $countAssessment = $maxAssessment ? $maxAssessment + 1 : 1;
 
             $comment = Comments::create([
@@ -123,13 +119,32 @@ class ProductController extends Controller
     public function deleteComment($id): JsonResponse {
         try {
             $comment = Comment::findOrFail($id);
-            if(!$comment){
-                return response()->json('Id informado não existe', 422);
-            }
             $comment->delete();
             return response()->json('Comentario deletado', 200);
         } catch (\Exception $th) {
             return response()->json($th->getMessage(), 400);
+        }
+    }
+
+    public function showComment(int $productId){
+        try {
+            $getComment = Comments::where('product_id', $productId)->get();
+            $comments = [];
+
+            foreach ($getComment as $comment) {
+                $user = User::find($comment->user_id);
+                $commentData = [
+                    'User' => $user->name,
+                    'comment' => $comment->comment,
+                    'assessment' => $comment->assessment,
+                ];
+                
+                array_push($comments, $commentData);
+        }
+            return response()->json($comments, 200);
+
+        } catch (\Exception $th) {
+            return response()->json($th->getMessage(), 500);
         }
     }
 

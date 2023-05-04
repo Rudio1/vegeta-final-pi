@@ -23,11 +23,4 @@ class Comments extends Model
 
     public $timestamps = true;
     
-    public function userforeign(){
-        return $this->hasMany(User::class, 'email_user', 'email');
-    }
-
-    public function productForeign(){
-        return $this->hasMany(Product::class, 'product_id', 'name');
-    }
 }
