@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
-Route::post('/user', [UserController::class, 'createUser']); //Registre-se
+Route::get('/user/all', [UserController::class, 'allUsers']);
+Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -27,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function () {
-        Route::get('/{id}', [UserController::class, 'findById']);
         Route::delete('/{id}', [UserController::class, 'deleteUser']);
         Route::put('/{id}', [UserController::class, 'updateUser']);
     });

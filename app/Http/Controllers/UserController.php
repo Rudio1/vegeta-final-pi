@@ -6,9 +6,9 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PutUsers;
 use App\Http\Requests\UserRequest;
 use App\Mail\sendMailRegister;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Helpers\JsonResponseHelper;
 
@@ -19,7 +19,7 @@ class UserController extends Controller
             if (Auth::attempt($request->only('email', 'password'))){
                 $user = Auth::user();
                 $token = $user->createToken('token')->plainTextToken;
-                $response = JsonResponseHelper::jsonResponse($token, [], true);   
+                $response = JsonResponseHelper::jsonResponse($token, 'Login efetuado com sucesso', true);   
             } else {
                 $response = JsonResponseHelper::jsonResponse([], 'Usuário ou senha incorreto', false, 401);    
             }
@@ -29,15 +29,13 @@ class UserController extends Controller
         return $response;
     }
 
-    public function findById(int $id): JsonResponse{
+    public function allUsers(): JsonResponse{
         try {
-            $User = User::findOrfail($id);
-            $response = JsonResponseHelper::jsonResponse($User, [], true);
-            
+            $User = User::all();
+            $response = JsonResponseHelper::jsonResponse($User, [], true);   
         } catch (\Exception $th) {
             $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
-
         return $response;
     }
 
