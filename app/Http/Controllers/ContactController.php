@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Helpers\JsonResponseHelper;
 
 class ContactController extends Controller
 {
@@ -18,9 +18,9 @@ class ContactController extends Controller
                 'description' => $request->description,
             ]);
             $contact->save();
-            return response()->json('Mensagem enviada!', 200);
+            return JsonResponseHelper::jsonResponse([], 'Mensagem enviada!', true);
         } catch (\Exception $th) {
-            return response()->json($th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
     }
 }
