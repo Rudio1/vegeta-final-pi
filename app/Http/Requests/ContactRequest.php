@@ -3,12 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Category;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class ContactRequest extends FormRequest
+class ContactRequest extends validationRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -41,10 +38,5 @@ class ContactRequest extends FormRequest
             'category_id.required' => 'Selecione uma categoria',
             'description.required' => 'Informe a descrição',
         ];
-    }
-    
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

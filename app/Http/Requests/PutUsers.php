@@ -6,16 +6,14 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
-class PutUsers extends FormRequest
+class PutUsers extends validationRequest
 {
 
     public function authorize()
     {
         return true;
     }
-
 
     public function rules()
     {
@@ -36,10 +34,5 @@ class PutUsers extends FormRequest
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];
         
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

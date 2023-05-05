@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\validationRequest;
 use Illuminate\Validation\Rule;
 
-class CommentRequest extends FormRequest
+class CommentRequest extends validationRequest
 {
 
     /**
@@ -40,12 +38,7 @@ class CommentRequest extends FormRequest
             'comment.required' => 'Informe o comentario',
             'assessment.required' => 'Informe a avaliação',
             'email_user.required' => 'informe o email',
-            'product_name' => 'Informe o nome do produto'
+            'product_name.required' => 'Informe o nome do produto'
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

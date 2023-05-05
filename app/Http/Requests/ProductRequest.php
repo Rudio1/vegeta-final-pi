@@ -2,11 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Foundation\Http\FormRequest;
-
-class ProductRequest extends FormRequest
+class ProductRequest extends validationRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -41,10 +37,4 @@ class ProductRequest extends FormRequest
             'product_image.required' => 'Informe a imagem',
         ];
     }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
-    }
-
 }
