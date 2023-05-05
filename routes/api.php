@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
 Route::post('/user', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 
-Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Helpers\JsonResponseHelper;
 
 class UserController extends Controller
 {
@@ -18,75 +19,67 @@ class UserController extends Controller
             if (Auth::attempt($request->only('email', 'password'))){
                 $user = Auth::user();
                 $token = $user->createToken('token')->plainTextToken;
-                return response()->json($token, 200);   
+                $response = JsonResponseHelper::jsonResponse($token, [], true);   
             } else {
-                return response()->json('Usuário ou senha incorreto', 401);    
+                $response = JsonResponseHelper::jsonResponse([], 'Usuário ou senha incorreto', false, 401);    
             }
         } catch (\Exception $th) {
-            return response()->json('Ocorreu um erro durante o login', 500);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
+        return $response;
     }
 
     public function findById(int $id): JsonResponse{
         try {
-            $User = User::find($id);
-
-            if(!$User){
-                return response()->json('Id invalido', 422);    
-            }
-            return response()->json($User, 200);
+            $User = User::findOrfail($id);
+            $response = JsonResponseHelper::jsonResponse($User, [], true);
             
         } catch (\Exception $th) {
-            return response()->json($th->getMessage(), 400);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
+
+        return $response;
     }
 
     public function deleteUser(int $id): JsonResponse{
         try {
-            $User = User::find($id);
-            if(!$User) {
-                return response()->json('Id informado não existe', 422);
-            }
-
+            $User = User::findOrfail($id);
             $User->delete();
-            return response()->json('Usuario deletado com sucesso!', 204);
+            $response = JsonResponseHelper::jsonResponse([], 'Usuario deletado com sucesso!', true, 200);
         } catch (\Exception $th) {
-            return response()->json($th->getMessage(), 400);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
+        return $response;
     }
 
     public function createUser(UserRequest $request): JsonResponse{
         $nameUser = $request->name;
         try {
-            $User =User::create([
+            User::create([
                 'name' => $nameUser,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-
-                // Mail::to($request->email)->send(new sendMailRegister($nameUser));
-                return response()->json('Email enviado' . $User, 200); 
+            // Mail::to($request->email)->send(new sendMailRegister($nameUser));
+            $response= JsonResponseHelper::jsonResponse([], 'Usuario Criado', true, 201);
         } catch (\Exception $th) {
-            return response()->json($th->getMessage(), 400);
+            $response= JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
+        return $response;
     }
 
     public function updateUser(PutUsers $request, int $id) : JsonResponse{
-
         try {
             $User = User::findorfail($id);
-            if(!$User){
-                return response()->json('Id invalido', 422);
-            }
             $User->name = $request->input('name') ?: $User->name; 
             $User->email = $request->input('email') ?: $User->email; 
             $User->password = $request->input('password')?: bcrypt($User->password);
             $User->save();
-
-            return response()->json($User, 201);
+            $response = JsonResponseHelper::jsonResponse($User, 'Usuario atualizado', true);
         } catch (\Exception $th) {
-            return response()->json($th->getMessage(), 400);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
+        return $response;
         
     }
 }
