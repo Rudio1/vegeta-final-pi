@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class PutUsers extends validationRequest
@@ -21,7 +19,18 @@ class PutUsers extends validationRequest
 
         return [
             'nome' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email',Rule::unique('users')->ignore($userId),
+            'email' => [
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($userId),
+                function ($getvalue) use ($userId) {
+                    $user = User::find($userId);
+                    if ($user && $user->email !== $getvalue) {
+                        return 'Não é possível atualizar o email';
+                    }
+                }
+            ],
             'senha' => 'string|min:8',
         ];
     }
@@ -30,7 +39,7 @@ class PutUsers extends validationRequest
     {
         return [
             'nome.max' => 'Informe um nome valido',
-            'email.unique' => 'Este e-mail já esta cadastrado',
+            // 'email.unique' => 'Este e-mail já esta cadastrado',
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];
         

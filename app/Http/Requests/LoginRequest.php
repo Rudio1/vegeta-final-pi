@@ -33,10 +33,10 @@ class LoginRequest extends validationRequest
         return [
             'email.required' => 'Informe um e-mail',
             'email.email' => 'Email Invalido',
-            'email.exists' => 'E-mail não cadastrado',
+            'email.exists' => 'E-mail ou senha incorreto',
             'password.min' => 'Senha muito fraca',
             'password.required' => 'Informe sua senha',
-            'password.password' => 'Senha incorreta',
+            'password.password' => 'E-mail ou senha incorreto',
         ];
     }
 }

@@ -21,7 +21,7 @@ class UserController extends Controller
                 $token = $user->createToken('token')->plainTextToken;
                 $response = JsonResponseHelper::jsonResponse($token, 'Login efetuado com sucesso', true);   
             } else {
-                $response = JsonResponseHelper::jsonResponse([], 'Usuário ou senha incorreto', false, 401);    
+                $response = JsonResponseHelper::jsonResponse([], 'E-mail ou senha incorreto', false, 401);    
             }
         } catch (\Exception $th) {
             $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
@@ -70,8 +70,7 @@ class UserController extends Controller
         try {
             $User = User::findorfail($id);
             $User->name = $request->input('name') ?: $User->name; 
-            $User->email = $request->input('email') ?: $User->email; 
-            $User->password = $request->input('password')?: bcrypt($User->password);
+            $User->password = bcrypt($request->input('password')) ?: bcrypt($User->password);
             $User->save();
             $response = JsonResponseHelper::jsonResponse($User, 'Usuario atualizado', true);
         } catch (\Exception $th) {
