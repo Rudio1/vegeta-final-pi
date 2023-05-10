@@ -19,7 +19,7 @@ class UserController extends Controller
             if (Auth::attempt($request->only('email', 'password'))){
                 $user = Auth::user();
                 $token = $user->createToken('token')->plainTextToken;
-                $response = JsonResponseHelper::jsonResponse($token, 'Login efetuado com sucesso', true);   
+                $response = JsonResponseHelper::jsonResponse(['token'=> $token], 'Login efetuado com sucesso', true);   
             } else {
                 $response = JsonResponseHelper::jsonResponse([], 'E-mail ou senha incorreto', false, 401);    
             }
