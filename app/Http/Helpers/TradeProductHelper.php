@@ -4,6 +4,7 @@ namespace App\Http\Helpers;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Requests\TradeRequest;
+use App\Models\ProductHistory;
 use App\Models\ProductSelled;
 use App\Models\User;
 use Illuminate\Auth\AuthManager;
@@ -35,17 +36,24 @@ class TradeProductHelper
             foreach ($currentProduct as $value){
                 $currentProductId = $value->id;
             }
-
             if($currentProduct){
+                $history = ProductSelled::select('id')->where('product_id', $currentProductId)
+                ->where('user_id', $user->id)->first();
+                ProductHistory::create([
+                    'old_user_id' => $user->id,
+                    'new_user_id' => $newUser->id,
+                    'product_selleds_id' => $history->id,
+                ]);
+
                 ProductSelled::where('product_id', $currentProductId)
                     ->where('user_id', $user->id)
                     ->update(['user_id' => $newUser->id, 'resale' => 1]);
-            
                 return JsonResponseHelper::jsonResponse($currentProduct, 'Produto Transferido com sucesso', true);
             }
+            return JsonResponseHelper::jsonResponse([], 'Você nao possui produtos', false, 500);
         } catch (\Exception $th) {
-            return JsonResponseHelper::jsonResponse([], $th->getMessage(), 500, false);
+            return JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
-        throw new \Exception('Você nao possui produtos');
+        
     }
 }

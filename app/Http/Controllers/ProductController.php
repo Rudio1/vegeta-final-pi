@@ -204,12 +204,12 @@ class ProductController extends Controller
     public function tradeProduct(TradeRequest $request) : JsonResponse{
         try {
             $productTrader = new TradeProductHelper(auth(), $request, $this);
-            $response = $productTrader->tradeProduct();
+            return $productTrader->tradeProduct();
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
         
-        return $response;
+        
         
     }
 }
