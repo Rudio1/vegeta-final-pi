@@ -47,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('contact')->group(function () {
         Route::post('/send-contact', [ContactController::class, 'sendContact']); //contate-me
     });
+
+    Route::post('/trade/product', [ProductController::class, 'tradeProduct']);
 });
 
 

@@ -14,6 +14,9 @@ use App\Models\User;
 use Egulias\EmailValidator\Warning\Comment;
 use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\JsonResponseHelper;
+use App\Http\Helpers\TradeProductHelper;
+use App\Http\Requests\TradeRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -102,7 +105,7 @@ class ProductController extends Controller
                 'avg_assessment' => (($product->comments()->avg('assessment') * $product->comments()->count()) + $request->assessment) / ($product->comments()->count() + 1),
             ]);
             $comment->save();
-            $response = JsonResponseHelper::jsonResponse([], 'Comentario adicionado', true);
+            $response = JsonResponseHelper::jsonResponse($comment, 'Comentario adicionado', true);
         } catch (\Exception $th) {
             $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
@@ -196,6 +199,18 @@ class ProductController extends Controller
             $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
         }
         return $response;
+    }
+
+    public function tradeProduct(TradeRequest $request) : JsonResponse{
+        try {
+            $productTrader = new TradeProductHelper(auth(), $request, $this);
+            $response = $productTrader->tradeProduct();
+        } catch (\Exception $th) {
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+        }
+        
+        return $response;
+        
     }
 }
 

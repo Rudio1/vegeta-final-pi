@@ -19,7 +19,7 @@ class CreateProductSelledsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->date('buy_date');
             $table->integer('serie_number');
-            $table->bit('resale')->default(0);
+            $table->integer('resale')->default(0);
         });
     }
     /**
