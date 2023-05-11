@@ -13,7 +13,7 @@ class SellProductHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_selleds_history', function (Blueprint $table) {
+        Schema::create('product_selleds_historic', function (Blueprint $table) {
             $table->id();
             $table->foreignId('old_user_id')->constrained('users');
             $table->foreignId('new_user_id')->constrained('users');

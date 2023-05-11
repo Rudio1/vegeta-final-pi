@@ -4,7 +4,7 @@ namespace App\Http\Helpers;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Requests\TradeRequest;
-use App\Models\ProductHistory;
+use App\Models\ProductHistoric;
 use App\Models\ProductSelled;
 use App\Models\User;
 use Illuminate\Auth\AuthManager;
@@ -37,12 +37,12 @@ class TradeProductHelper
                 $currentProductId = $value->id;
             }
             if($currentProduct){
-                $history = ProductSelled::select('id')->where('product_id', $currentProductId)
+                $historic = ProductSelled::select('id')->where('product_id', $currentProductId)
                 ->where('user_id', $user->id)->first();
-                ProductHistory::create([
+                ProductHistoric::create([
                     'old_user_id' => $user->id,
                     'new_user_id' => $newUser->id,
-                    'product_selleds_id' => $history->id,
+                    'product_selleds_id' => $historic->id,
                 ]);
 
                 ProductSelled::where('product_id', $currentProductId)
