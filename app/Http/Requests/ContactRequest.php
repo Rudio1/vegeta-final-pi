@@ -25,8 +25,7 @@ class ContactRequest extends validationRequest
     public function rules()
     {
         return [
-           'name' => ['required', 'string'],
-           'category_id' => ['required', 'int', Rule::in(array_column(Category::all()->toArray(), 'id'))],
+           'category' => ['required', 'string', Rule::in(array_column(Category::all()->toArray(), 'name'))],
            'description' => ['required', 'string'],    
         ];
     }
