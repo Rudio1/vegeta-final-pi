@@ -14,17 +14,16 @@ class ContactController extends Controller
         try {
             $category = Category::select('id')
                     ->where('name', $request->category)->first();
-            dd($category);
             $user = auth()->user();
             $contact = Contact::create([
                 'name' => $user->name,
-                'category_id' => $category,
+                'category_id' => $category->id,
                 'description' => $request->description,
             ]);
-            $contact->save();
-            return JsonResponseHelper::jsonResponse([], 'Mensagem enviada!', true);
+            unset($contact->id);
+            return JsonResponseHelper::jsonResponse($contact, 'Mensagem enviada!');
         } catch (\Exception $th) {
-            return JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
     }
 }
