@@ -19,12 +19,12 @@ class UserController extends Controller
             if (Auth::attempt($request->only('email', 'password'))){
                 $user = Auth::user();
                 $token = $user->createToken('token')->plainTextToken;
-                $response = JsonResponseHelper::jsonResponse(['token'=> $token], 'Login efetuado com sucesso', true);   
+                $response = JsonResponseHelper::jsonResponse(['token'=> $token], 'Login efetuado com sucesso', );   
             } else {
-                $response = JsonResponseHelper::jsonResponse([], 'E-mail ou senha incorreto', false, 401);    
+                $response = JsonResponseHelper::jsonResponse([], 'E-mail ou senha incorreto', 401);    
             }
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
         return $response;
     }
@@ -32,9 +32,9 @@ class UserController extends Controller
     public function allUsers(): JsonResponse{
         try {
             $User = User::all();
-            $response = JsonResponseHelper::jsonResponse($User, [], true);   
+            $response = JsonResponseHelper::jsonResponse($User, [], );   
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
         return $response;
     }
@@ -43,9 +43,9 @@ class UserController extends Controller
         try {
             $User = User::findOrfail($id);
             $User->delete();
-            $response = JsonResponseHelper::jsonResponse([], 'Usuario deletado com sucesso!', true, 200);
+            $response = JsonResponseHelper::jsonResponse([], 'Usuario deletado com sucesso!', 200);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
         return $response;
     }
@@ -59,9 +59,9 @@ class UserController extends Controller
                 'password' => bcrypt($request->password),
             ]);
             // Mail::to($request->email)->send(new sendMailRegister($nameUser));
-            $response= JsonResponseHelper::jsonResponse([], 'Usuario Criado', true, 201);
+            $response= JsonResponseHelper::jsonResponse([], 'Usuario Criado', 201);
         } catch (\Exception $th) {
-            $response= JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            $response= JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
         return $response;
     }
@@ -72,9 +72,9 @@ class UserController extends Controller
             $User->name = $request->input('name') ?: $User->name; 
             $User->password = bcrypt($request->input('password')) ?: bcrypt($User->password);
             $User->save();
-            $response = JsonResponseHelper::jsonResponse($User, 'Usuario atualizado', true);
+            $response = JsonResponseHelper::jsonResponse($User, 'Usuario atualizado', );
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }
         return $response;
         
