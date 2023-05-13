@@ -52,7 +52,9 @@ Todos os responses abaixos são 200
 **Response**
 ```
 {
-    "data": "12|M39zJxrNFwx5Jxg76NJmaj6mBXvyW3x04iIi7SqJ",
+    "data": {
+        "token": "58|dL6y7dXVKqcUa9iZqx660u0eIbtADH8HOK4at25w"
+    },
     "message": "Login efetuado com sucesso",
     "status": true
 }
@@ -105,3 +107,29 @@ Authorization -> Bearer Token
 }
 ```
 ---
+
+## Contatos:
+**Rota para contate-nos**
+```
+[POST] - contact/send/contact
+```
+**Body**
+Authorization -> Bearer Token
+```
+{
+    "category" : "Dúvidas",
+    "description" : "teste"
+}
+```
+
+**Response**
+```
+{
+    "data": {
+        "name": "guilherme",
+        "category_id": 3,
+        "description": "teste"
+    },
+    "message": "Mensagem enviada!"
+}
+```
