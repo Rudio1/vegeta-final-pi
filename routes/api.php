@@ -25,6 +25,7 @@ Route::post('/user/login', [UserController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function () {
@@ -38,7 +39,6 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::post('/createProduct', [ProductController::class, 'createProduct']);
         Route::put('/{id}', [ProductController::class, 'updateProduct']);
         Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']);
-        Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
         Route::post('/comments', [ProductController::class, 'newComment']); //Novo Comentario
         Route::put('/comments/{id}', [ProductController::class, 'updateComment']); 
         Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario

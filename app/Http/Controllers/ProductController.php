@@ -23,35 +23,30 @@ class ProductController extends Controller
     public function getAllProduct() : JsonResponse{
         try {
             $products = Product::all();
-            $response = JsonResponseHelper::jsonResponse($products, [], true);
+            return JsonResponseHelper::jsonResponse($products);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function findById(int $id) : JsonResponse{
         try {
             $product = Product::findOrFail($id);
-            $response = JsonResponseHelper::jsonResponse($product,[], true);
-
+            return JsonResponseHelper::jsonResponse(['product' => $product]);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function deleteProduct(int $id): JsonResponse{
         try {
             $product = Product::findOrFail($id);
             $product->delete();
-            $response = JsonResponseHelper::jsonResponse([], 'Produto deletado', true);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto deletado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
-        return $response;
     }
-
     public function updateProduct(Request $request, int $id) :  JsonResponse{
         try {
             $product = Product::findOrFail($id);
@@ -60,11 +55,10 @@ class ProductController extends Controller
             $product->description = $request->input('description') ?: $product->description;
             $product->product_image = $request->input('product_image') ?: $product->product_image;
             $product->save();
-            $response = JsonResponseHelper::jsonResponse([], 'Produto atualizado', true);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto atualizado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function createProduct(ProductRequest $request) :  JsonResponse{
@@ -82,11 +76,10 @@ class ProductController extends Controller
                 'product_image' => $nomeArquivo
             ]);
             $product->save();
-            $response = JsonResponseHelper::jsonResponse($product, 'Produto criado', true);
+            return JsonResponseHelper::jsonResponse(['product'=> $product, 'message'=>'Produto criado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }    
-        return $response;
     }
 
     public function newComment(CommentRequest $request): JsonResponse{
@@ -105,11 +98,10 @@ class ProductController extends Controller
                 'avg_assessment' => (($product->comments()->avg('assessment') * $product->comments()->count()) + $request->assessment) / ($product->comments()->count() + 1),
             ]);
             $comment->save();
-            $response = JsonResponseHelper::jsonResponse($comment, 'Comentario adicionado', true);
+            return JsonResponseHelper::jsonResponse(['comment'=> $comment, 'message' => 'Comentario adicionado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function updateComment(Request $request, $id) : JsonResponse {
@@ -117,22 +109,20 @@ class ProductController extends Controller
             $comment = Comments::findOrFail($id);
             $comment->comment = $request->input('comment') ?: $comment->comment;
             $comment->save();
-            $response= JsonResponseHelper::jsonResponse($comment, 'Comentario atualizado', true);
+            return JsonResponseHelper::jsonResponse(['comment' => $comment, 'message'=>'Comentario atualizado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage(), 500]);
         }
-        return $response;
     }
 
     public function deleteComment(int $id): JsonResponse {
         try {
             $comment = Comment::findOrFail($id);
             $comment->delete();
-            $response = JsonResponseHelper::jsonResponse([], 'Comentario deletado', true);
+            return JsonResponseHelper::jsonResponse(['message' => 'Comentario deletado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function showComment(int $productId) : JsonResponse{
@@ -148,12 +138,11 @@ class ProductController extends Controller
                 ];
                 array_push($comments, $commentData);
         }
-            $response= JsonResponseHelper::jsonResponse($comments, [], true);
+            return JsonResponseHelper::jsonResponse(['comment' => $comments]);
 
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message' =>  $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function userProduct() : JsonResponse{
@@ -164,14 +153,13 @@ class ProductController extends Controller
                             ->select('products.*')
                             ->get();
             if(!$product->isEmpty()){
-                $response = JsonResponseHelper::jsonResponse($product, [], true);
+                return JsonResponseHelper::jsonResponse(['product' => $product]);
             }else {
-                $response = JsonResponseHelper::jsonResponse([], 'Você ainda não possui produtos', false, 500);
+                return JsonResponseHelper::jsonResponse(['message' => 'Você ainda não possui produtos'], 500);
             }            
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function selledProducts(SelledProduct $request) : JsonResponse {
@@ -185,7 +173,7 @@ class ProductController extends Controller
                             ->where('product_id', $product->id)
                             ->where('serie_number', $request->number_serie)
                             ->exists()){
-                $response = JsonResponseHelper::jsonResponse([], 'O produto já existe para o usuário', false, 500);
+                return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 500);
             }
             $selledProduct = ProductSelled::create([
                 'product_id' => $product->id,
@@ -194,11 +182,10 @@ class ProductController extends Controller
                 'serie_number' => $request->number_serie,
             ]);
             $selledProduct->save();
-            $response = JsonResponseHelper::jsonResponse($selledProduct, [], true);
+            return JsonResponseHelper::jsonResponse(['selledProduct' => $selledProduct]);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function tradeProduct(TradeRequest $request) : JsonResponse{
@@ -206,11 +193,8 @@ class ProductController extends Controller
             $productTrader = new TradeProductHelper(auth(), $request, $this);
             return $productTrader->tradeProduct();
         } catch (\Exception $th) {
-            return JsonResponseHelper::jsonResponse([], $th->getMessage(), false, 500);
-        }
-        
-        
-        
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
+        }    
     }
 }
 
