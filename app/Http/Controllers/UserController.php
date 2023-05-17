@@ -19,35 +19,32 @@ class UserController extends Controller
             if (Auth::attempt($request->only('email', 'password'))){
                 $user = Auth::user();
                 $token = $user->createToken('token')->plainTextToken;
-                $response = JsonResponseHelper::jsonResponse(['token'=> $token], 'Login efetuado com sucesso', );   
+                return JsonResponseHelper::jsonResponse(['token'=> $token, 'message'=>'Login efetuado com sucesso']);
             } else {
-                $response = JsonResponseHelper::jsonResponse([], 'E-mail ou senha incorreto', 401);    
+                return JsonResponseHelper::jsonResponse(['message'=> 'Usuario ou senha invalido'], 401);       
             }
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message'=> $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function allUsers(): JsonResponse{
         try {
             $User = User::all();
-            $response = JsonResponseHelper::jsonResponse($User, [], );   
+            return JsonResponseHelper::jsonResponse($User);   
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function deleteUser(int $id): JsonResponse{
         try {
             $User = User::findOrfail($id);
             $User->delete();
-            $response = JsonResponseHelper::jsonResponse([], 'Usuario deletado com sucesso!', 200);
+            return JsonResponseHelper::jsonResponse(['message'=>'Usuario deletado com sucesso!']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function createUser(UserRequest $request): JsonResponse{
@@ -59,11 +56,10 @@ class UserController extends Controller
                 'password' => bcrypt($request->password),
             ]);
             // Mail::to($request->email)->send(new sendMailRegister($nameUser));
-            $response= JsonResponseHelper::jsonResponse([], 'Usuario Criado', 201);
+            return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado']);
         } catch (\Exception $th) {
-            $response= JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
     }
 
     public function updateUser(PutUsers $request, int $id) : JsonResponse{
@@ -72,11 +68,9 @@ class UserController extends Controller
             $User->name = $request->input('name') ?: $User->name; 
             $User->password = bcrypt($request->input('password')) ?: bcrypt($User->password);
             $User->save();
-            $response = JsonResponseHelper::jsonResponse($User, 'Usuario atualizado', );
+            return JsonResponseHelper::jsonResponse([$User, 'message' => 'Usuario atualizado']);
         } catch (\Exception $th) {
-            $response = JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
-        return $response;
-        
     }
 }
