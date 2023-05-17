@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SellProductHistoryTable extends Migration
+class CreateProductSelledHistoric extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class SellProductHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_selleds_historic', function (Blueprint $table) {
+        Schema::create('product_selled_historic', function (Blueprint $table) {
             $table->id();
             $table->foreignId('old_user_id')->constrained('users');
             $table->foreignId('new_user_id')->constrained('users');
@@ -29,12 +29,12 @@ class SellProductHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::table('product_selleds_history', function (Blueprint $table) {
+        Schema::table('product_selled_historic', function (Blueprint $table) {
             $table->drop(['old_user_id']);
             $table->drop(['new_user_id']);
             $table->drop(['product_selleds_id']);
         });
 
-        Schema::dropIfExists('product_selleds_history');
+        Schema::dropIfExists('product_selled_historic');
     }
 }

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductHistoric extends Model
+class ProductSelledHistoric extends Model
 {
     use HasFactory;
 
     
-    protected $table = 'product_selleds_historic';
+    protected $table = 'product_selled_historic';
     public $timestamps = true;
 
     protected $fillable = [
