@@ -22,6 +22,8 @@ class CreateProductSelledHistoric extends Migration
         });
     }
 
+    
+
     /**
      * Reverse the migrations.
      *
@@ -29,12 +31,6 @@ class CreateProductSelledHistoric extends Migration
      */
     public function down()
     {
-        Schema::table('product_selled_historic', function (Blueprint $table) {
-            $table->drop(['old_user_id']);
-            $table->drop(['new_user_id']);
-            $table->drop(['product_selleds_id']);
-        });
-
         Schema::dropIfExists('product_selled_historic');
     }
 }
