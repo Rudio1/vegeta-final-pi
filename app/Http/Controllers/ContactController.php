@@ -21,7 +21,7 @@ class ContactController extends Controller
                 'description' => $request->description,
             ]);
             unset($contact->id);
-            return JsonResponseHelper::jsonResponse($contact, 'Mensagem enviada!');
+            return JsonResponseHelper::jsonResponse(['contact' => $contact, 'message' => 'Mensagem enviada!']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse([], $th->getMessage(), 500);
         }

@@ -31,9 +31,9 @@ Todos os responses abaixos são 200
 **Response:**
 ```
 {
-    "data": [],
-    "message": "Usuario Criado",
-    "status": true
+    "data": {
+        "message": "Usuario Criado"
+    }
 }
 ```
 ---
@@ -53,10 +53,9 @@ Todos os responses abaixos são 200
 ```
 {
     "data": {
-        "token": "58|dL6y7dXVKqcUa9iZqx660u0eIbtADH8HOK4at25w"
-    },
-    "message": "Login efetuado com sucesso",
-    "status": true
+        "token": "1|9hbpJa6mT3lMmJpKC74nv9Jn1O0lJ4z3scCH4Eqd",
+        "message": "Login efetuado com sucesso"
+    }
 }
 ```
 ---
@@ -73,9 +72,9 @@ Essa rota necessita do Authorization -> Bearer Token que é gerado ao fazer o lo
 **Response**
 ```
 {
-    "data": [],
-    "message": "Usuario deletado com sucesso!",
-    "status": true
+    "data": {
+        "message": "Usuario deletado com sucesso!"
+    }
 }
 ```
 --- 
@@ -98,12 +97,13 @@ Authorization -> Bearer Token
 ```
 {
     "data": {
-        "id": 2,
-        "name": "guilhermeteste",
-        "email": "guilhermeatualiza@gmail.com"
-    },
-    "message": "Usuario atualizado",
-    "status": true
+        "user": {
+            "id": 1,
+            "name": "guilherme",
+            "email": "guilhermerudio@gmail.com"
+        },
+        "message": "Usuario atualizado"
+    }
 }
 ```
 ---

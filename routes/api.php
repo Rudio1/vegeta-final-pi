@@ -33,14 +33,14 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::put('/{id}', [UserController::class, 'updateUser']);
     });
     Route::prefix('product')->group(function () {
-        Route::get('/{id}', [ProductController::class, 'findById']);
+        Route::get('/{id}', [ProductController::class, 'findById']); //
         Route::get('/users/Product', [ProductController::class, 'userProduct']); //Retorna o produto por usuario
-        Route::delete('/{id}', [ProductController::class, 'deleteProduct']);
-        Route::post('/createProduct', [ProductController::class, 'createProduct']);
-        Route::put('/{id}', [ProductController::class, 'updateProduct']);
-        Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']);
+        Route::delete('/{id}', [ProductController::class, 'deleteProduct']); //Remove o produto
+        Route::post('/createProduct', [ProductController::class, 'createProduct']); //Cria o produto
+        Route::put('/{id}', [ProductController::class, 'updateProduct']); //Atualiza os dados do produto
+        Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']); //Remove o comentario 
         Route::post('/comments', [ProductController::class, 'newComment']); //Novo Comentario
-        Route::put('/comments/{id}', [ProductController::class, 'updateComment']); 
+        Route::put('/comments/{id}', [ProductController::class, 'updateComment']); //Atualiza os dados do comentario
         Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario
     });
     

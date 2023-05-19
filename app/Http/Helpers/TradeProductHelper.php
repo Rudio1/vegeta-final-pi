@@ -47,6 +47,7 @@ class TradeProductHelper
                 ]);
 
                 //fazer datediff data de validade
+                
 
                 ProductSelled::where('product_id', $currentProductId)
                     ->where('user_id', $user->id)

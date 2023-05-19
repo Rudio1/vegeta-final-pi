@@ -68,7 +68,7 @@ class UserController extends Controller
             $User->name = $request->input('name') ?: $User->name; 
             $User->password = bcrypt($request->input('password')) ?: bcrypt($User->password);
             $User->save();
-            return JsonResponseHelper::jsonResponse([$User, 'message' => 'Usuario atualizado']);
+            return JsonResponseHelper::jsonResponse(['user' => $User, 'message' => 'Usuario atualizado']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
