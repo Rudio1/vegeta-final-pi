@@ -182,7 +182,7 @@ class ProductController extends Controller
                 'serie_number' => $request->number_serie,
             ]);
             $selledProduct->save();
-            return JsonResponseHelper::jsonResponse(['selledProduct' => $selledProduct]);
+            return JsonResponseHelper::jsonResponse(['selledProduct' => $selledProduct, 'message' => 'Produto vendido']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }

@@ -133,3 +133,59 @@ Authorization -> Bearer Token
     "message": "Mensagem enviada!"
 }
 ```
+---
+## Produto:
+**Rota que retorna os produtos por usuario**
+```
+[GET] - product/users/Product
+```
+**Body**
+Authorization -> Bearer Token
+**Response**
+```
+{
+    "data": {
+        "product": [
+            {
+                "id": 1,
+                "name": "produto3",
+                "price": "32.0",
+                "description": "testetestetestetestetestetestetestetestetesteteste",
+                "product_image": "evidencia 2.jpg",
+                "created_at": "2023-05-19T23:20:53.727000Z",
+                "updated_at": "2023-05-19T23:20:53.727000Z"
+            }
+        ]
+    }
+}
+```
+---
+**Rota para venda de um produto**
+```
+[POST] - api/product/sell
+```
+**Body**
+```
+{
+    "email_user" : "teste123@gmail.com", 
+    "product_name" : "produto3",
+    "number_serie" : "12345"
+}
+```
+**Response**
+```
+{
+    "data": {
+        "selledProduct": {
+            "product_id": 1,
+            "user_id": 3,
+            "buy_date": "2023-05-20",
+            "serie_number": "12345",
+            "id": 3
+        },
+        "message": "Produto vendido"
+    }
+}
+```
+
+
