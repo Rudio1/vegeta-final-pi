@@ -165,6 +165,7 @@ Authorization -> Bearer Token
 [POST] - api/product/sell
 ```
 **Body**
+Authorization -> Bearer Token
 ```
 {
     "email_user" : "teste123@gmail.com", 
@@ -187,5 +188,40 @@ Authorization -> Bearer Token
     }
 }
 ```
+---
+**Rota para adicionar um comentario no produto**
+```
+[POST] - api/product/comments
+```
+Authorization -> Bearer Token
+**Body**
+```
+{
+    "comment" : "comentario para o produto de id 1",
+    "assessment": 4,    
+    "email_user" : "guilhermerudio6@gmail.com",
+    "product_name" : "produto3"
+}
+```
+**Response**
+```
+{
+    "data": {
+        "comment": {
+            "comment": "comentario para o produto de id 1",
+            "assessment": 2,
+            "user_id": 2,
+            "product_id": 1,
+            "count_assessment": 1,
+            "avg_assessment": 2,
+            "updated_at": "2023-05-22T16:57:33.341000Z",
+            "created_at": "2023-05-22T16:57:33.341000Z",
+            "id": 1
+        },
+        "message": "Comentario adicionado"
+    }
+}
+``` 
+---
 
 
