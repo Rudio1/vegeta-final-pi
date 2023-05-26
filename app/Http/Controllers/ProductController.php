@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function getAllProduct() : JsonResponse{
         try {
             $products = Product::all();
-            return JsonResponseHelper::jsonResponse($products);
+            return JsonResponseHelper::jsonResponse(['products' => $products]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
@@ -42,7 +42,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $product->delete();
-            return JsonResponseHelper::jsonResponse(['message' => 'Produto deletado']);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto deletado de id ' . $product->id . ' deletado com sucesso']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
@@ -55,7 +55,7 @@ class ProductController extends Controller
             $product->description = $request->input('description') ?: $product->description;
             $product->product_image = $request->input('product_image') ?: $product->product_image;
             $product->save();
-            return JsonResponseHelper::jsonResponse(['message' => 'Produto atualizado']);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto de id ' . $product->id . ' atualizado com sucesso']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
@@ -76,7 +76,7 @@ class ProductController extends Controller
                 'product_image' => $nomeArquivo
             ]);
             $product->save();
-            return JsonResponseHelper::jsonResponse(['product'=> $product, 'message'=>'Produto criado']);
+            return JsonResponseHelper::jsonResponse(['message'=>'Produto criado']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }    
@@ -98,7 +98,7 @@ class ProductController extends Controller
                 'avg_assessment' => (($product->comments()->avg('assessment') * $product->comments()->count()) + $request->assessment) / ($product->comments()->count() + 1),
             ]);
             $comment->save();
-            return JsonResponseHelper::jsonResponse(['comment'=> $comment, 'message' => 'Comentario adicionado']);
+            return JsonResponseHelper::jsonResponse(['message' => 'comentario adicionado para o produto de id ' . $product->id]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
@@ -109,7 +109,7 @@ class ProductController extends Controller
             $comment = Comments::findOrFail($id);
             $comment->comment = $request->input('comment') ?: $comment->comment;
             $comment->save();
-            return JsonResponseHelper::jsonResponse(['comment' => $comment, 'message'=>'Comentario atualizado']);
+            return JsonResponseHelper::jsonResponse(['message'=>'Comentario de id' . $comment->id. ' atualizado']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage(), 500]);
         }
@@ -182,7 +182,7 @@ class ProductController extends Controller
                 'serie_number' => $request->number_serie,
             ]);
             $selledProduct->save();
-            return JsonResponseHelper::jsonResponse(['selledProduct' => $selledProduct, 'message' => 'Produto vendido']);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto vendido para o usuario ' . $user->name]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }

@@ -46,14 +46,11 @@ class TradeProductHelper
                     'product_selleds_id' => $historic->id,
                 ]);
 
-                //fazer datediff data de validade
-                
-
                 ProductSelled::where('product_id', $currentProductId)
                     ->where('user_id', $user->id)
                     ->update(['user_id' => $newUser->id, 'resale' => 1]);
 
-                return JsonResponseHelper::jsonResponse([$currentProduct, 'message' => 'Produto Transferido com sucesso']);
+                return JsonResponseHelper::jsonResponse(['message' => 'Produto Transferido com sucesso para o usuario ' . $newUser->name]);
             }
             return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui produtos'], 500);
         } catch (\Exception $th) {
