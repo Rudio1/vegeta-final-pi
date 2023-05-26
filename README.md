@@ -53,7 +53,7 @@ Todos os responses abaixos são 200
 ```
 {
     "data": {
-        "token": "1|9hbpJa6mT3lMmJpKC74nv9Jn1O0lJ4z3scCH4Eqd",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC91c2VyXC9sb2dpbiIsImlhdCI6MTY4NTExNTg0NCwiZXhwIjoxNjg1MTE5NDQ0LCJuYmYiOjE2ODUxMTU4NDQsImp0aSI6IlJxZjBpdDdCMVpyNG94SksiLCJzdWIiOjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.vzWN03In1Xp_Ce480uMmZQPY3Jc3Kgi3kkovg2S6Jjg",
         "message": "Login efetuado com sucesso"
     }
 }
@@ -89,7 +89,6 @@ Authorization -> Bearer Token
 ```
 {
     "nome" : "atualizandousuario",
-    "email" : "guilhermeatualiza@gmail.com",
     "password" : "passwordnovo123"
 }
 ```
@@ -97,12 +96,7 @@ Authorization -> Bearer Token
 ```
 {
     "data": {
-        "user": {
-            "id": 1,
-            "name": "guilherme",
-            "email": "guilhermerudio@gmail.com"
-        },
-        "message": "Usuario atualizado"
+        "message": "Usuario atualizado de id 2 atualizado com sucesso"
     }
 }
 ```
@@ -141,19 +135,22 @@ Authorization -> Bearer Token
 ```
 **Body**
 Authorization -> Bearer Token
+Exemplo de um usuario com 2 produtos
+
 **Response**
 ```
 {
     "data": {
         "product": [
             {
-                "id": 1,
                 "name": "produto3",
                 "price": "32.0",
-                "description": "testetestetestetestetestetestetestetestetesteteste",
-                "product_image": "evidencia 2.jpg",
-                "created_at": "2023-05-19T23:20:53.727000Z",
-                "updated_at": "2023-05-19T23:20:53.727000Z"
+                "description": "testetestetestetestetestetestetestetestetesteteste"
+            },
+            {
+                "name": "produto teste",
+                "price": "123123.0",
+                "description": "teste produto"
             }
         ]
     }
@@ -177,14 +174,7 @@ Authorization -> Bearer Token
 ```
 {
     "data": {
-        "selledProduct": {
-            "product_id": 1,
-            "user_id": 3,
-            "buy_date": "2023-05-20",
-            "serie_number": "12345",
-            "id": 3
-        },
-        "message": "Produto vendido"
+        "message": "Produto vendido para o usuario guilherme"
     }
 }
 ```
@@ -198,8 +188,7 @@ Authorization -> Bearer Token
 ```
 {
     "comment" : "comentario para o produto de id 1",
-    "assessment": 4,    
-    "email_user" : "guilhermerudio6@gmail.com",
+    "assessment": 5,    
     "product_name" : "produto3"
 }
 ```
@@ -207,21 +196,87 @@ Authorization -> Bearer Token
 ```
 {
     "data": {
-        "comment": {
-            "comment": "comentario para o produto de id 1",
-            "assessment": 2,
-            "user_id": 2,
-            "product_id": 1,
-            "count_assessment": 1,
-            "avg_assessment": 2,
-            "updated_at": "2023-05-22T16:57:33.341000Z",
-            "created_at": "2023-05-22T16:57:33.341000Z",
-            "id": 1
-        },
-        "message": "Comentario adicionado"
+        "message": "comentario adicionado para o produto de id 1"
     }
 }
 ``` 
 ---
-
+**Rota para atualizar um comentario**
+```
+[POST] - api/product/comments/{id}
+```
+Authorization -> Bearer Token
+**Body**
+```
+{
+    "comment " : "alterando comentario"
+}
+```
+**Response**
+```
+{
+    "data": {
+        "message": "Comentario de id 1 atualizado"
+    }
+}
+```
+---
+**Rota para deletar um comentario no produto**
+```
+[DELETE] - api/product/comments/{id}
+```
+Authorization -> Bearer Token
+**Response**
+```
+{
+    "data": {
+        "message": "Comentario deletado com sucesso"
+    }
+}
+```
+---
+**Rota para retornar comentarios por produto**
+```
+[GET] - api/showcomment/{productId}
+```
+**Response**
+```
+{
+    "data": {
+        "comment": [
+            {
+                "User": "guilherme rudio",
+                "comment": "alterando comentario",
+                "assessment": "5"
+            },
+            {
+                "User": "guilherme rudio",
+                "comment": "teste comentario",
+                "assessment": "3"
+            }
+        ]
+    }
+}
+```
+---
+**Rota para transferencia de produto**
+```
+[POST]  - api/trade/product
+```
+**Body**
+```
+{
+    "new_user": "teste1233@gmail.com",
+    "product_name": "produto teste"
+}   
+```
+**Response**
+```
+{
+    "data": {
+        "message": "Produto Transferido com sucesso para o usuario guilherme rudio"
+    }
+}
+```
+---
 

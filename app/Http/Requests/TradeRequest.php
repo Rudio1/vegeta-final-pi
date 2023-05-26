@@ -25,7 +25,8 @@ class TradeRequest extends validationRequest
     public function rules()
     {
         return [
-            'new_user' => 'required|string|exists:users,email'
+            'new_user' => 'required|string|exists:users,email',
+            'product_name' => 'required|string|exists:products,name',
         ];
     }
 
@@ -33,6 +34,8 @@ class TradeRequest extends validationRequest
         return [
             'new_user.required' => 'Informe o novo usuario do produto',
             'new_user.exists' => 'Usuario nao existe',
+            'product_name.required' => 'Informe o nome do produto que deseja transferir',
+            'product_name.exists'  => 'Produto não existe'
         ];
     }
 

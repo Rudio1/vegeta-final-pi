@@ -118,9 +118,14 @@ class ProductController extends Controller
 
     public function deleteComment(int $id): JsonResponse {
         try {
+            $user = auth()->user();
             $comment = Comment::findOrFail($id);
-            $comment->delete();
-            return JsonResponseHelper::jsonResponse(['message' => 'Comentario deletado']);
+            if($user->id != $comment->user_id) {
+                return JsonResponseHelper::jsonResponse(['message' => 'Você nao tem permissao para deletar'], 401);    
+            }else {
+                $comment->delete();
+                return JsonResponseHelper::jsonResponse(['message' => 'Comentario deletado']);
+            }        
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
@@ -151,7 +156,7 @@ class ProductController extends Controller
             $user = auth()->user();
             $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id' )
                             ->where('product_selleds.user_id', $user->id)
-                            ->select('products.*')
+                            ->select('products.id', 'products.name', 'products.price', 'products.description')
                             ->get();
             if(!$product->isEmpty()){
                 return JsonResponseHelper::jsonResponse(['product' => $product]);

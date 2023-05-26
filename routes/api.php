@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
 Route::get('/user/all', [UserController::class, 'allUsers']);
 Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
+Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
 Route::post('/user/login', [UserController::class, 'login']);
 
 
@@ -44,7 +45,6 @@ Route::middleware('jwt.auth')->group(function() {
     Route::prefix('contact')->group(function () {
         Route::post('/send-contact', [ContactController::class, 'sendContact']); //contate-me
     });
-    Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
     Route::post('/trade/product', [ProductController::class, 'tradeProduct']);
 });
 
