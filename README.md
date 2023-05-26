@@ -67,7 +67,9 @@ Todos os responses abaixos são 200
 
 Essa rota necessita do Authorization -> Bearer Token que é gerado ao fazer o login
 
-**Body:** Bearer Token
+**Body:** 
+
+Bearer Token
 
 **Response**
 ```
@@ -134,6 +136,7 @@ Authorization -> Bearer Token
 [GET] - product/users/Product
 ```
 **Body**
+
 Authorization -> Bearer Token
 Exemplo de um usuario com 2 produtos
 
@@ -162,6 +165,7 @@ Exemplo de um usuario com 2 produtos
 [POST] - api/product/sell
 ```
 **Body**
+
 Authorization -> Bearer Token
 ```
 {
@@ -183,8 +187,10 @@ Authorization -> Bearer Token
 ```
 [POST] - api/product/comments
 ```
-Authorization -> Bearer Token
+
 **Body**
+
+Authorization -> Bearer Token
 ```
 {
     "comment" : "comentario para o produto de id 1",
@@ -205,8 +211,10 @@ Authorization -> Bearer Token
 ```
 [POST] - api/product/comments/{id}
 ```
-Authorization -> Bearer Token
+
 **Body**
+
+Authorization -> Bearer Token
 ```
 {
     "comment " : "alterando comentario"
@@ -225,6 +233,7 @@ Authorization -> Bearer Token
 ```
 [DELETE] - api/product/comments/{id}
 ```
+
 Authorization -> Bearer Token
 **Response**
 ```
@@ -239,6 +248,7 @@ Authorization -> Bearer Token
 ```
 [GET] - api/showcomment/{productId}
 ```
+
 **Response**
 ```
 {
@@ -263,6 +273,7 @@ Authorization -> Bearer Token
 ```
 [POST]  - api/trade/product
 ```
+
 **Body**
 ```
 {
