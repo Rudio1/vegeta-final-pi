@@ -22,12 +22,9 @@ Route::get('/user/all', [UserController::class, 'allUsers']);
 Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
 
-Route::middleware('auth:sanctum')->group(function() {
+
+Route::middleware('jwt.auth')->group(function() {
     Route::prefix('user')->group(function () {
         Route::delete('/{id}', [UserController::class, 'deleteUser']);
         Route::put('/{id}', [UserController::class, 'updateUser']);
@@ -47,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('contact')->group(function () {
         Route::post('/send-contact', [ContactController::class, 'sendContact']); //contate-me
     });
-
+    Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
     Route::post('/trade/product', [ProductController::class, 'tradeProduct']);
 });
 

@@ -17,8 +17,7 @@ class UserController extends Controller
     public function login(LoginRequest $request){
         try {
             if (Auth::attempt($request->only('email', 'password'))){
-                $user = Auth::user();
-                $token = $user->createToken('token')->plainTextToken;
+                $token = auth('api')->attempt($request->only('email', 'password'));
                 return JsonResponseHelper::jsonResponse(['token'=> $token, 'message'=>'Login efetuado com sucesso']);
             } else {
                 return JsonResponseHelper::jsonResponse(['message'=> 'Usuario ou senha invalido'], 401);       
