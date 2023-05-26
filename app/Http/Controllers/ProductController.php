@@ -7,7 +7,7 @@ use App\Http\Requests\CommentRequest;
 use App\Http\Requests\SelledProduct;
 use App\Models\Product;
 use DateTime;
-use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Psr7\Request;
 use App\Models\Comments;
 use App\Models\ProductSelled;
 use App\Models\User;
@@ -17,6 +17,7 @@ use App\Http\Helpers\JsonResponseHelper;
 use App\Http\Helpers\TradeProductHelper;
 use App\Http\Requests\TradeRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -104,12 +105,12 @@ class ProductController extends Controller
         }
     }
 
-    public function updateComment(Request $request, $id) : JsonResponse {
+    public function updateComment(Request $request, int $id) : JsonResponse {
         try {
             $comment = Comments::findOrFail($id);
             $comment->comment = $request->input('comment') ?: $comment->comment;
             $comment->save();
-            return JsonResponseHelper::jsonResponse(['message'=>'Comentario de id' . $comment->id. ' atualizado']);
+            return JsonResponseHelper::jsonResponse(['message'=>'Comentario de id '.  $comment->id. ' atualizado']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage(), 500]);
         }
