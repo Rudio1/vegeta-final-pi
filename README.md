@@ -65,11 +65,8 @@ Todos os responses abaixos são 200
  [Delete] - /user/{id}
 ```
 
-Essa rota necessita do Authorization -> Bearer Token que é gerado ao fazer o login
-
 **Body:** 
-
-Bearer Token
+Authorization -> Bearer Token
 
 **Response**
 ```
@@ -85,9 +82,7 @@ Bearer Token
 ```
 [PUT] - /user/{id}
 ```
-**Body** 
-
-Authorization -> Bearer Token 
+**Body** Authorization -> Bearer Token 
 ```
 {
     "nome" : "atualizandousuario",
@@ -109,8 +104,7 @@ Authorization -> Bearer Token
 ```
 [POST] - contact/send/contact
 ```
-**Body**
-Authorization -> Bearer Token
+**Body** Authorization -> Bearer Token
 ```
 {
     "category" : "Dúvidas",
@@ -135,9 +129,9 @@ Authorization -> Bearer Token
 ```
 [GET] - product/users/Product
 ```
-**Body**
+**Body** Authorization -> Bearer Token
 
-Authorization -> Bearer Token
+
 Exemplo de um usuario com 2 produtos
 
 **Response**
@@ -164,9 +158,7 @@ Exemplo de um usuario com 2 produtos
 ```
 [POST] - api/product/sell
 ```
-**Body**
-
-Authorization -> Bearer Token
+**Body** Authorization -> Bearer Token
 ```
 {
     "email_user" : "teste123@gmail.com", 
@@ -188,9 +180,7 @@ Authorization -> Bearer Token
 [POST] - api/product/comments
 ```
 
-**Body**
-
-Authorization -> Bearer Token
+**Body** Authorization -> Bearer Token
 ```
 {
     "comment" : "comentario para o produto de id 1",
@@ -212,9 +202,7 @@ Authorization -> Bearer Token
 [POST] - api/product/comments/{id}
 ```
 
-**Body**
-
-Authorization -> Bearer Token
+**Body** Authorization -> Bearer Token
 ```
 {
     "comment " : "alterando comentario"
@@ -234,7 +222,9 @@ Authorization -> Bearer Token
 [DELETE] - api/product/comments/{id}
 ```
 
-Authorization -> Bearer Token
+**Body** Authorization -> Bearer Token
+
+
 **Response**
 ```
 {
@@ -274,7 +264,7 @@ Authorization -> Bearer Token
 [POST]  - api/trade/product
 ```
 
-**Body**
+**Body** Authorization -> Bearer Token
 ```
 {
     "new_user": "teste1233@gmail.com",
