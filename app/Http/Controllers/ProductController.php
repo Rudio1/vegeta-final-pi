@@ -7,7 +7,6 @@ use App\Http\Requests\CommentRequest;
 use App\Http\Requests\SelledProduct;
 use App\Models\Product;
 use DateTime;
-// use GuzzleHttp\Psr7\Request;
 use App\Models\Comments;
 use App\Models\ProductSelled;
 use App\Models\User;
@@ -16,7 +15,6 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Helpers\JsonResponseHelper;
 use App\Http\Helpers\TradeProductHelper;
 use App\Http\Requests\TradeRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -43,7 +41,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $product->delete();
-            return JsonResponseHelper::jsonResponse(['message' => 'Produto deletado de id ' . $product->id . ' deletado com sucesso']);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto deletado de id ' . $product->id . ' deletado com sucesso'],204);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }
@@ -77,7 +75,7 @@ class ProductController extends Controller
                 'product_image' => $nomeArquivo
             ]);
             $product->save();
-            return JsonResponseHelper::jsonResponse(['message'=>'Produto criado']);
+            return JsonResponseHelper::jsonResponse(['message'=>'Produto criado'], 201);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()], 500);
         }    
@@ -161,7 +159,7 @@ class ProductController extends Controller
             if(!$product->isEmpty()){
                 return JsonResponseHelper::jsonResponse(['product' => $product]);
             }else {
-                return JsonResponseHelper::jsonResponse(['message' => 'Você ainda não possui produtos'], 500);
+                return JsonResponseHelper::jsonResponse(['message' => 'Você ainda não possui produtos'], 204);
             }            
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
@@ -179,7 +177,7 @@ class ProductController extends Controller
                             ->where('product_id', $product->id)
                             ->where('serie_number', $request->number_serie)
                             ->exists()){
-                return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 500);
+                return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 409);
             }
             $selledProduct = ProductSelled::create([
                 'product_id' => $product->id,

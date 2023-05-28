@@ -41,13 +41,9 @@ class TradeProductHelper
                             ->first();
             
             if($currentProductId == null){
-                return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui o produto'], 500);
+                return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui o produto'], 404);
             }
 
-            // foreach ($currentProductId as $value) {
-            //     $currentProductId =$value->id;
-            // }
-        
             if($currentProduct){
                 $historic = ProductSelled::select('id')->where('product_id', $currentProductId->id)
                 ->where('user_id', $user->id)->first();

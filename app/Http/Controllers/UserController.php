@@ -55,7 +55,7 @@ class UserController extends Controller
                 'password' => bcrypt($request->password),
             ]);
             Mail::to($request->email)->send(new sendMailRegister($nameUser));
-            return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado']);
+            return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado'], 201);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
