@@ -154,7 +154,7 @@ class ProductController extends Controller
             $user = auth()->user();
             $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id' )
                             ->where('product_selleds.user_id', $user->id)
-                            ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.product_image', 'product_selleds.serie_number', 'product_selleds.resale')
+                            ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.product_image', 'product_selleds.serie_number', 'product_selleds.resale', 'product_selleds.buy_date')
                             ->get();
             if(!$product->isEmpty()){
                 return JsonResponseHelper::jsonResponse(['product' => $product]);
@@ -175,7 +175,6 @@ class ProductController extends Controller
 
             if (ProductSelled::where('user_id', $user->id)
                             ->where('product_id', $product->id)
-                            ->where('serie_number', $request->number_serie)
                             ->exists()){
                 return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 409);
             }
