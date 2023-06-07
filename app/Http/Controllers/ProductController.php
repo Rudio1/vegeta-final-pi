@@ -63,16 +63,16 @@ class ProductController extends Controller
     public function createProduct(ProductRequest $request) :  JsonResponse{
         try {
             $extensao = $request->file('product_image')->extension();
-            $nome = explode('.', $request->file('product_image')->getClientOriginalName());
+            $nome = explode('.', $request->file('product_image')->getClientOriginalName())[0];
             $nomeArquivo = uniqid(date('HisYmd') . $nome[0]);
-            $nomeArquivo = "{$nome[0]}.{$extensao}";
-            $request->file('product_image')->storeAs('public/teste', $nomeArquivo);
+            $nomeArquivo = "{$nome}.{$extensao}";
+            $request->file('product_image')->storeAs('public/app', $nomeArquivo,);
             
             $product = Product::create([
                 'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
-                'product_image' => $nomeArquivo
+                'product_image' => 'storage/app/'. $nomeArquivo
             ]);
             $product->save();
             return JsonResponseHelper::jsonResponse(['message'=>'Produto criado'], 201);
@@ -154,7 +154,7 @@ class ProductController extends Controller
             $user = auth()->user();
             $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id' )
                             ->where('product_selleds.user_id', $user->id)
-                            ->select('products.id', 'products.name', 'products.price', 'products.description')
+                            ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.product_image', 'product_selleds.serie_number', 'product_selleds.resale')
                             ->get();
             if(!$product->isEmpty()){
                 return JsonResponseHelper::jsonResponse(['product' => $product]);

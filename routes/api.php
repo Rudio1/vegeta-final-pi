@@ -19,8 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/product/getAllProduct', [ProductController::class, 'getAllProduct']);
 Route::get('/user/all', [UserController::class, 'allUsers']);
-Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
+Route::get('/{id}', [ProductController::class, 'findById']); //
 Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
+Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 
 
@@ -31,7 +32,6 @@ Route::middleware('jwt.auth')->group(function() {
         Route::put('/{id}', [UserController::class, 'updateUser']);
     });
     Route::prefix('product')->group(function () {
-        Route::get('/{id}', [ProductController::class, 'findById']); //
         Route::get('/users/Product', [ProductController::class, 'userProduct']); //Retorna o produto por usuario
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']); //Remove o produto
         Route::post('/createProduct', [ProductController::class, 'createProduct']); //Cria o produto

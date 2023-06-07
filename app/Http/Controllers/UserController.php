@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PutUsers;
 use App\Http\Requests\UserRequest;
-use App\Mail\sendMailRegister;
+use App\Mail\ConfirmacaoCadastro;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -54,7 +54,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-            Mail::to($request->email)->send(new sendMailRegister($nameUser));
+            Mail::to($request->email)->send(new ConfirmacaoCadastro($nameUser));
             return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado'], 201);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);

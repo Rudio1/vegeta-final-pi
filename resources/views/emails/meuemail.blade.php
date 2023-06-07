@@ -50,9 +50,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Confirmação de Cadastro</h1>
+        <h1>Confirmação de Cadastro VTR EFFECTS</h1>
         <p>Olá {{$userName}}</p>
-        <p>Seu cadastro foi realizado com sucesso!</p>
+        <p>Seu cadastro no app VTR EFFECTS foi realizado com sucesso!</p>
         <p>Se você não realizou esse cadastro, ignore este email.</p>
         <div class="footer">
             <p>Este é um email automático, por favor não responda.</p>
