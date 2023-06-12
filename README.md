@@ -175,7 +175,7 @@ Authorization -> Bearer Token
 **Body** Authorization -> Bearer Token
 
 
-Exemplo de um usuario com 2 produtos
+Exemplo de um usuario com 3 produtos
 
 **Response**
 ```
@@ -183,14 +183,34 @@ Exemplo de um usuario com 2 produtos
     "data": {
         "product": [
             {
-                "name": "produto3",
-                "price": "32.0",
-                "description": "testetestetestetestetestetestetestetestetesteteste"
+                "id": 1,
+                "name": "Kailani Reverb",
+                "price": 1447,
+                "description": "Um reverb stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com oito modos de reverb diferentes, você pode escolher desde um ambiente natural e espaçoso até um efeito denso e imersivo.",
+                "product_image": "storage/app/pedalTres.png",
+                "serie_number": 1,
+                "resale": 0,
+                "buy_date": "2023-06-09"
             },
             {
-                "name": "produto teste",
-                "price": "123123.0",
-                "description": "teste produto"
+                "id": 2,
+                "name": "Helios Overdrive",
+                "price": 1447,
+                "description": "O Helios Overdrive é um pedal de overdrive analógico com recursos digitais avançados. Com uma ampla gama de opções de personalização, oferece o timbre perfeito para seu som. Desde sutis saturações até drives intensos, o Helios proporciona uma resposta dinâmica e orgânica. Com recursos únicos e versatilidade excepcional, é o pedal de overdrive ideal para elevar sua expressão musical.",
+                "product_image": "storage/app/pedalDois.png",
+                "serie_number": 2,
+                "resale": 0,
+                "buy_date": "2023-06-09"
+            },
+            {
+                "id": 3,
+                "name": "Narciso Delay",
+                "price": 1447,
+                "description": "Um delay stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com quatros modos de delays diferentes, você pode escolher desde um clássico delay analógico até um delay com pitch bem psicodélico.",
+                "product_image": "storage/app/pedalUm.png",
+                "serie_number": 5,
+                "resale": 1,
+                "buy_date": "2023-06-09"
             }
         ]
     }
