@@ -23,6 +23,7 @@ Route::get('/{id}', [ProductController::class, 'findById']); //
 Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']); //Retorna o comentario por produto
 Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
 
 
 

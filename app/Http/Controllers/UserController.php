@@ -27,6 +27,16 @@ class UserController extends Controller
         }
     }
 
+    public function logout(){
+        try {
+            auth('api')->logout();
+            auth('api')->invalidate(true);
+            return JsonResponseHelper::jsonResponse(['message' => 'Logout efetuado com sucesso']);
+        } catch (\Exception $th) {
+            return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
+        }
+    }
+
     public function allUsers(): JsonResponse{
         try {
             $User = User::all();

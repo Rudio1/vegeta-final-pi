@@ -125,6 +125,49 @@ Authorization -> Bearer Token
 ```
 ---
 ## Produto:
+**Rota que retorna todos os produtos**
+```
+[GET] - product/getAllProduct
+```
+
+**Response**
+```
+{
+	"data": {
+		"products": [
+			{
+				"id": 1,
+				"name": "Kailani Reverb",
+				"price": 1447,
+				"description": "Um reverb stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com oito modos de reverb diferentes, você pode escolher desde um ambiente natural e espaçoso até um efeito denso e imersivo.",
+				"product_image": "storage/app/pedalTres.png",
+				"created_at": "2023-06-09T13:28:22.000000Z",
+				"updated_at": "2023-06-09T13:28:22.000000Z"
+			},
+			{
+				"id": 2,
+				"name": "Helios Overdrive",
+				"price": 1447,
+				"description": "O Helios Overdrive é um pedal de overdrive analógico com recursos digitais avançados. Com uma ampla gama de opções de personalização, oferece o timbre perfeito para seu som. Desde sutis saturações até drives intensos, o Helios proporciona uma resposta dinâmica e orgânica. Com recursos únicos e versatilidade excepcional, é o pedal de overdrive ideal para elevar sua expressão musical.",
+				"product_image": "storage/app/pedalDois.png",
+				"created_at": "2023-06-09T13:29:45.000000Z",
+				"updated_at": "2023-06-09T13:29:45.000000Z"
+			},
+			{
+				"id": 3,
+				"name": "Narciso Delay",
+				"price": 1447,
+				"description": "Um delay stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com quatros modos de delays diferentes, você pode escolher desde um clássico delay analógico até um delay com pitch bem psicodélico.",
+				"product_image": "storage/app/pedalUm.png",
+				"created_at": "2023-06-09T13:30:08.000000Z",
+				"updated_at": "2023-06-09T13:30:08.000000Z"
+			}
+		]
+	}
+} 
+```
+
+
 **Rota que retorna os produtos por usuario**
 ```
 [GET] - product/users/Product
