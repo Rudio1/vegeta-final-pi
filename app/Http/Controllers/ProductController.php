@@ -16,12 +16,25 @@ use App\Http\Helpers\JsonResponseHelper;
 use App\Http\Helpers\TradeProductHelper;
 use App\Http\Requests\TradeRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
     public function getAllProduct() : JsonResponse{
         try {
-            $products = Product::all();
+            $products = Product::select('products.id', 'name', 'price', 'description', 'product_image', 'comments_posts.avg_assessment')
+                    ->leftJoin('comments_posts', function ($join) {
+                    $join->on('comments_posts.product_id', '=', 'products.id')
+                    ->where('comments_posts.created_at', '=', function ($select) {
+                            $select->select(DB::raw('MAX(created_at)'))
+                                ->from('comments_posts')
+                                ->whereColumn('product_id', 'products.id');
+                        });
+                })->get();
+
+            foreach ($products as $value) {
+                if(!$value->avg_assessment ? $value->avg_assessment =0 : $value->avg_assessment );
+            }
             return JsonResponseHelper::jsonResponse(['products' => $products]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
