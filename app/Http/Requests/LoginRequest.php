@@ -27,14 +27,13 @@ class LoginRequest extends validationRequest
             'password' => 'required|string',
         ];
     }
-
+    
     public function messages()
     {
         return [
-            'email.required' => 'Informe um e-mail',
-            'email.email' => 'Email Invalido',
+            'email.required' => 'E-mail ou senha incorreto',
+            'email.email' => 'E-mail ou senha incorreto',
             'email.exists' => 'E-mail ou senha incorreto',
-            'password.min' => 'Senha muito fraca',
             'password.required' => 'Informe sua senha',
             'password.password' => 'E-mail ou senha incorreto',
         ];

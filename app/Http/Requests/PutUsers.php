@@ -39,7 +39,6 @@ class PutUsers extends validationRequest
     {
         return [
             'nome.max' => 'Informe um nome valido',
-            // 'email.unique' => 'Este e-mail já esta cadastrado',
             'senha.min' => 'A senha precisa ter no minimo 8 digitos',
         ];
         

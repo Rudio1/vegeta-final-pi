@@ -33,7 +33,7 @@ class UserRequest extends validationRequest
         return [
             'name' => ['required', 'string'],
             'email' => ['required', 'unique:users'],
-            'password' => 'required|min:8',
+            'password' => 'required',
             'password_confirmed' => 'required|same:password'
         ];
     }
@@ -43,7 +43,6 @@ class UserRequest extends validationRequest
         return [
             'name.required' => 'O nome é obrigatorio',
             'email.unique' => 'Este e-mail já esta cadastrado',
-            'password.min' => 'A senha precisa ter no minimo 8 digitos', 
             'password.required' => 'A senha é obrigatoria',
             'password_confirmed.required' => 'Você deve confirmar sua senha',
             'password_confirmed.same' => 'As senhas devem ser iguais',

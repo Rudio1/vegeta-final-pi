@@ -64,7 +64,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-            Mail::to($request->email)->send(new ConfirmacaoCadastro($nameUser));
+            // Mail::to($request->email)->send(new ConfirmacaoCadastro($nameUser));
             return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado'], 201);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
