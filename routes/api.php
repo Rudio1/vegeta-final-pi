@@ -24,6 +24,7 @@ Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']
 Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/forgetpassword', [UserController::class, 'forgetPassword']);
 
 
 

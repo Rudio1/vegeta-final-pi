@@ -20,6 +20,6 @@ class validationRequest extends FormRequest
                 'erros' => $erros,
             ],
             'success' => false,
-        ], 500));
+        ], 400));
     }
 }

@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Helpers\JsonResponseHelper;
+use App\Http\Requests\PasswordRequest;
+use GuzzleHttp\Psr7\Request;
 
 class UserController extends Controller
 {
@@ -57,6 +59,17 @@ class UserController extends Controller
         }
     }
 
+    public function forgetPassword(PasswordRequest $request) {
+        try {
+            $user = User::where('email', $request->email)->first();
+            $user->password = bcrypt($request->input('password')) ?: bcrypt($user->password);
+            $user->save();
+            return JsonResponseHelper::jsonResponse(['message'=>'Senha alterada com sucesso']);
+        } catch (\Throwable $th) {
+            return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage()]);
+        }
+    }
+
     public function createUser(UserRequest $request): JsonResponse{
         $nameUser = $request->name;
         try {
@@ -65,7 +78,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-            // Mail::to($request->email)->send(new ConfirmacaoCadastro($nameUser));
+            // Mail::to($request->email)->send(new ConfirmacaoCadastro($nameUser)); Envio de e-mail para confirmação de cadastro
             return JsonResponseHelper::jsonResponse(['message' => 'Usuario Criado'], 201);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
@@ -76,7 +89,6 @@ class UserController extends Controller
         try {
             $User = User::findorfail($id);
             $User->name = $request->input('name') ?: $User->name; 
-            $User->password = bcrypt($request->input('password')) ?: bcrypt($User->password);
             $User->save();
             return JsonResponseHelper::jsonResponse(['message' => 'Usuario atualizado de id ' . $User->id . ' atualizado com sucesso']);
         } catch (\Exception $th) {

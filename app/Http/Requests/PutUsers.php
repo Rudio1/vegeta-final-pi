@@ -31,7 +31,6 @@ class PutUsers extends validationRequest
                     }
                 }
             ],
-            'senha' => 'string|min:8',
         ];
     }
 
@@ -39,7 +38,7 @@ class PutUsers extends validationRequest
     {
         return [
             'nome.max' => 'Informe um nome valido',
-            'senha.min' => 'A senha precisa ter no minimo 8 digitos',
+            'nome.required' => 'Informe um nome',
         ];
         
     }
