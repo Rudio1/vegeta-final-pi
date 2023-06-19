@@ -18,6 +18,8 @@ use App\Http\Requests\TradeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ProductController extends Controller
 {
     public function getAllProduct() : JsonResponse{
@@ -100,6 +102,15 @@ class ProductController extends Controller
             $product = Product::where('name', $request->product_name)->firstOrFail();
             $maxAssessment = Comments::where('product_id', $product->id)->max('count_assessment');
             $countAssessment = $maxAssessment ? $maxAssessment + 1 : 1;
+            $validate= Comments::where('user_id', $user->id)
+                    ->where('product_id', $product->id)
+                    ->get();
+            
+            foreach ($validate as $value) {
+                if(isset($value->id)){
+                    return JsonResponseHelper::jsonResponse(['message' => 'Já existe um comentario para esse produto'], 400);
+                }
+            }
 
             $comment = Comments::create([
                 'comment' => $request->comment,
