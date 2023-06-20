@@ -33,12 +33,12 @@ class TradeProductHelper
         try {
             $user = $this->auth->user();
             $newUser = User::where('email', $this->request->new_user)->firstOrFail();
-            $currentProduct = $this->productController->userProduct()->original['data'];
+            $productId = Product::select('id')->where('name', $this->request->product_name)->first()->id;
             
             $currentProductId = Product::select('products.id')
                             ->join('product_selleds', 'product_selleds.product_id', '=', 'products.id')
-                            ->where('products.name', $this->request->product_name)
-                            ->where('product_selleds.serie_number', $this->request->number_serie)
+                            ->where('products.id', $productId)
+                            ->where('product_selleds.serie_number', $this->request->serie_number)
                             ->where('product_selleds.user_id', $user->id)
                             ->first();
             
@@ -46,22 +46,20 @@ class TradeProductHelper
                 return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui o produto com esse numero de serie'], 404);
             }
 
-            if($currentProduct){
-                $historic = ProductSelled::select('id')->where('product_id', $currentProductId->id)
-                ->where('user_id', $user->id)->first();
+            $historic = ProductSelled::select('id')->where('product_id', $currentProductId->id)
+            ->where('user_id', $user->id)->first();
+            ProductSelledHistoric::create([
+                'old_user_id' => $user->id,
+                'new_user_id' => $newUser->id,
+                'product_selleds_id' => $historic->id,
+            ]);
 
-                ProductSelledHistoric::create([
-                    'old_user_id' => $user->id,
-                    'new_user_id' => $newUser->id,
-                    'product_selleds_id' => $historic->id,
-                ]);
-
-                ProductSelled::where('product_id', $currentProductId->id)
-                    ->where('serie_number', $this->request->number_serie)
+            ProductSelled::where('product_id', $currentProductId->id)
+                    ->where('serie_number', $this->request->serie_number)
                     ->update(['user_id' => $newUser->id, 'resale' => 1]);
 
-                return JsonResponseHelper::jsonResponse(['message' => 'Produto Transferido com sucesso para o usuario ' . $newUser->name]);
-            }
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto Transferido com sucesso para o usuario ' . $newUser->name]);
+            
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }
