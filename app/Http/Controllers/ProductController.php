@@ -24,19 +24,7 @@ class ProductController extends Controller
 {
     public function getAllProduct() : JsonResponse{
         try {
-            $products = Product::select('products.id', 'name', 'price', 'description', 'product_image', 'comments_posts.avg_assessment')
-                    ->leftJoin('comments_posts', function ($join) {
-                    $join->on('comments_posts.product_id', '=', 'products.id')
-                    ->where('comments_posts.created_at', '=', function ($select) {
-                            $select->select(DB::raw('MAX(created_at)'))
-                                ->from('comments_posts')
-                                ->whereColumn('product_id', 'products.id');
-                        });
-                })->get();
-
-            foreach ($products as $value) {
-                if(!$value->avg_assessment ? $value->avg_assessment =0 : $value->avg_assessment );
-            }
+            $products = Product::select('products.id', 'name', 'price', 'description', 'product_image')->get();
             return JsonResponseHelper::jsonResponse(['products' => $products]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
@@ -199,9 +187,16 @@ class ProductController extends Controller
 
             if (ProductSelled::where('user_id', $user->id)
                             ->where('product_id', $product->id)
+                            ->where('serie_number', $request->number_serie)
                             ->exists()){
                 return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 409);
+
+            }elseif (ProductSelled::where('product_id', $product->id)
+                                ->where('serie_number', $request->number_serie)
+                                ->exists()) {
+                return JsonResponseHelper::jsonResponse(['message' => 'Já existe o produto para o numero de serie informado'], 409);
             }
+
             $selledProduct = ProductSelled::create([
                 'product_id' => $product->id,
                 'user_id' => $user->id,
@@ -222,6 +217,25 @@ class ProductController extends Controller
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
         }    
+    }
+
+    public function assessment() : JsonResponse {
+        $avg_assessment = Product::select('comments_posts.avg_assessment')
+        ->leftJoin('comments_posts', function ($join) {
+            $join->on('comments_posts.product_id', '=', 'products.id')
+                ->where('comments_posts.created_at', '=', function ($select) {
+                    $select->select(DB::raw('MAX(created_at)'))
+                        ->from('comments_posts')
+                        ->whereColumn('comments_posts.product_id', 'products.id');
+                });
+        })->get();
+    
+        foreach ($avg_assessment as $value) {
+            if(!$value->avg_assessment ? $value->avg_assessment = 0.0 : $value->avg_assessment );
+        }
+
+    return JsonResponseHelper::jsonResponse(['message' => $avg_assessment]);
+    
     }
 }
 

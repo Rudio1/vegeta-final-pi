@@ -11,7 +11,7 @@ class ProductSelledHistoric extends Model
 
     
     protected $table = 'product_selled_historic';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'old_user_id',

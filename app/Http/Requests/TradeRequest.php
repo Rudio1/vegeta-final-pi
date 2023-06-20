@@ -27,6 +27,7 @@ class TradeRequest extends validationRequest
         return [
             'new_user' => 'required|string|exists:users,email',
             'product_name' => 'required|string|exists:products,name',
+            'serie_number' => 'required|exists:product_selleds,serie_number'
         ];
     }
 
@@ -35,7 +36,9 @@ class TradeRequest extends validationRequest
             'new_user.required' => 'Informe o novo usuario do produto',
             'new_user.exists' => 'Usuario nao existe',
             'product_name.required' => 'Informe o nome do produto que deseja transferir',
-            'product_name.exists'  => 'Produto não existe'
+            'product_name.exists'  => 'Produto não existe',
+            'serie_number.exists' => 'O numero de serie nao existe',
+            'serie_number.required' => 'Informe o numero de serie'
         ];
     }
 

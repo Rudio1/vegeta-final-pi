@@ -24,7 +24,8 @@ Route::get('/showcomment/{productId}', [ProductController::class, 'showComment']
 Route::post('/user/register', [UserController::class, 'createUser']); //Registre-se
 Route::post('/user/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/forgetpassword', [UserController::class, 'forgetPassword']);
+Route::get('/product/assessment', [ProductController::class, 'assessment']);
+// Route::post('/forgetpassword', [UserController::class, 'forgetPassword']);
 
 
 
@@ -34,6 +35,7 @@ Route::middleware('jwt.auth')->group(function() {
         Route::put('/{id}', [UserController::class, 'updateUser']);
     });
     Route::prefix('product')->group(function () {
+        Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario
         Route::get('/users/Product', [ProductController::class, 'userProduct']); //Retorna o produto por usuario
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']); //Remove o produto
         Route::post('/createProduct', [ProductController::class, 'createProduct']); //Cria o produto
@@ -41,7 +43,6 @@ Route::middleware('jwt.auth')->group(function() {
         Route::delete('/comments/{id}', [ProductController::class, 'deleteComment']); //Remove o comentario 
         Route::post('/comments', [ProductController::class, 'newComment']); //Novo Comentario
         Route::put('/comments/{id}', [ProductController::class, 'updateComment']); //Atualiza os dados do comentario
-        Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario
     });
     
     Route::prefix('contact')->group(function () {
