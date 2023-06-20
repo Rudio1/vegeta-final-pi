@@ -120,7 +120,7 @@ class ProductController extends Controller
             $comment = Comments::findOrFail($id);
             $comment->comment = $request->input('comment') ?: $comment->comment;
             $comment->save();
-            return JsonResponseHelper::jsonResponse(['message'=>'Comentario de id '.  $comment->id. ' atualizado']);
+            return JsonResponseHelper::jsonResponse( ['message'=>'Comentario de id '.  $comment->id. ' atualizado']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage(), 500]);
         }
@@ -191,8 +191,7 @@ class ProductController extends Controller
                             ->exists()){
                 return JsonResponseHelper::jsonResponse(['message' => 'O produto já existe para o usuário'], 409);
 
-            }elseif (ProductSelled::where('product_id', $product->id)
-                                ->where('serie_number', $request->number_serie)
+            }elseif (ProductSelled::where('serie_number', $request->number_serie)
                                 ->exists()) {
                 return JsonResponseHelper::jsonResponse(['message' => 'Já existe o produto para o numero de serie informado'], 409);
             }
@@ -228,7 +227,7 @@ class ProductController extends Controller
                         ->from('comments_posts')
                         ->whereColumn('comments_posts.product_id', 'products.id');
                 });
-        })->get();
+            })->get();
     
         foreach ($avg_assessment as $value) {
             if(!$value->avg_assessment ? $value->avg_assessment = 0.0 : $value->avg_assessment );

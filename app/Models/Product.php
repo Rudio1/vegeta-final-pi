@@ -10,13 +10,16 @@ class Product extends Model
     use HasFactory;
 
     protected $table = 'products';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'name',
         'price',
         'description',
-        'product_image'
+        'product_image',
+        'link_yt',
+        'link_manual', 
+        'link_driver'
     ];
 
     public function comments(){
