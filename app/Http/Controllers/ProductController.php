@@ -24,7 +24,7 @@ class ProductController extends Controller
 {
     public function getAllProduct() : JsonResponse{
         try {
-            $products = Product::select('products.id', 'name', 'price', 'description', 'product_image')->get();
+            $products = Product::all();
             return JsonResponseHelper::jsonResponse(['products' => $products]);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
@@ -227,11 +227,10 @@ class ProductController extends Controller
                         ->from('comments_posts')
                         ->whereColumn('comments_posts.product_id', 'products.id');
                 });
-            })->get();
-    
-        foreach ($avg_assessment as $value) {
-            if(!$value->avg_assessment ? $value->avg_assessment = 0.0 : $value->avg_assessment );
-        }
+            })->first()->avg_assessment;
+            
+            if($avg_assessment == null ? $avg_assessment =0.0 : $avg_assessment );
+            strlen($avg_assessment) > 3 ? $avg_assessment = number_format($avg_assessment, 2, '.', '') : $avg_assessment = $avg_assessment;   
 
     return JsonResponseHelper::jsonResponse(['message' => $avg_assessment]);
     
