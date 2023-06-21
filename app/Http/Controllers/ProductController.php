@@ -219,7 +219,7 @@ class ProductController extends Controller
     }
 
     public function assessment() : JsonResponse {
-        $avg_assessment = Product::select('comments_posts.avg_assessment')
+        $avg_assessment = Product::select('products.id', 'comments_posts.avg_assessment')
         ->leftJoin('comments_posts', function ($join) {
             $join->on('comments_posts.product_id', '=', 'products.id')
                 ->where('comments_posts.created_at', '=', function ($select) {
@@ -227,10 +227,11 @@ class ProductController extends Controller
                         ->from('comments_posts')
                         ->whereColumn('comments_posts.product_id', 'products.id');
                 });
-            })->first()->avg_assessment;
+            })->get();
             
-            if($avg_assessment == null ? $avg_assessment =0.0 : $avg_assessment );
-            strlen($avg_assessment) > 3 ? $avg_assessment = number_format($avg_assessment, 2, '.', '') : $avg_assessment = $avg_assessment;   
+            foreach ($avg_assessment as $value) {
+                if(!$value->avg_assessment ? $value->avg_assessment =0.0 : $value->avg_assessment );
+            }
 
     return JsonResponseHelper::jsonResponse(['message' => $avg_assessment]);
     
