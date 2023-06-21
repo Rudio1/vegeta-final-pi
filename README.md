@@ -5,9 +5,13 @@
 
 2 - php artisan migrate --seed
 
-3 - php artisan migrate
+3 - php artisan storage:link
 
-4 - php artisan serve
+4 - php artisan migrate
+
+5 - php artisan serve
+
+
 
 ## API
 API contém rotas para gerenciamento de usuários, produtos e contatos. As rotas de usuários incluem registro, login, pesquisa, atualização e exclusão de usuários. As rotas de produtos incluem pesquisa, criação, atualização e exclusão de produtos, bem como rotas para gerenciar comentários sobre produtos e vendas de produtos. A rota de contatos permite que um usuário envie uma mensagem de contato.
@@ -133,31 +137,63 @@ Authorization -> Bearer Token
 **Response**
 ```
 {
+	"data": {
+		"products": [
+			{
+				"id": 1,
+				"name": "Narciso Delay",
+				"price": "1447.0",
+				"description": "Um delay stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com quatros modos de delays diferentes, você pode escolher desde um clássico delay analógico até um delay com pitch bem psicodélico.",
+				"product_image": "storage/app/pedalUm.jpg",
+				"link_yt": "https://www.youtube.com/watch?v=hFq0ho1UbTs ",
+				"link_manual": "https://vtreffects.com.br/narciso-delay-gold-series-manual/",
+				"link_driver": "https://drive.google.com/file/d/1anBilSRo4gLEfhVOFpX5oTpby4kPVHrm/view"
+			},
+			{
+				"id": 2,
+				"name": "Helios Overdrive",
+				"price": "1447.0",
+				"description": "O Helios Overdrive é um pedal de overdrive analógico com recursos digitais avançados. Com uma ampla gama de opções de personalização, oferece o timbre perfeito para seu som. Desde sutis saturações até drives intensos, o Helios proporciona uma resposta dinâmica e orgânica. Com recursos únicos e versatilidade excepcional, é o pedal de overdrive ideal para elevar sua expressão musical.",
+				"product_image": "storage/app/pedalDois.jpg",
+				"link_yt": "https://www.youtube.com/watch?v=P97v6RF0lF8",
+				"link_manual": "https://vtreffects.com.br/helios-overdrive-gold-series-manual/",
+				"link_driver": "https://drive.google.com/file/d/1lyDpKn2vs91WB1E-Di8Tx1sTsJqyjaqX/view"
+			},
+			{
+				"id": 3,
+				"name": "Kailani Reverb",
+				"price": "1447.0",
+				"description": "Um reverb stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com oito modos de reverb diferentes, você pode escolher desde um ambiente natural e espaçoso até um efeito denso e imersivo.",
+				"product_image": "storage/app/pedalTres.jpg",
+				"link_yt": "https://www.youtube.com/watch?v=bZEg7Dvsf4k ",
+				"link_manual": "https://vtreffects.com.br/kailani-reverb-gold-series-manual/",
+				"link_driver": "https://drive.google.com/file/d/1aj5uPvgii3burNqC8QrDbq_C_sqK62p3/view"
+			}
+		]
+	}
+}
+```
+
+**Rota que retorna a media de avaliação por produto**
+```
+[GET] - product/assessment
+```
+**Response**
+```
+{
     "data": {
-        "products": [
+        "message": [
             {
-                "id": 3,
-                "name": "Narciso Delay",
-                "price": 1447,
-                "description": "Um delay stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com quatros modos de delays diferentes, você pode escolher desde um clássico delay analógico até um delay com pitch bem psicodélico.",
-                "product_image": "storage/app/pedalUm.png",
-                "avg_assessment": 5
+                "id": 1,
+                "avg_assessment": 0
             },
             {
                 "id": 2,
-                "name": "Helios Overdrive",
-                "price": 1447,
-                "description": "O Helios Overdrive é um pedal de overdrive analógico com recursos digitais avançados. Com uma ampla gama de opções de personalização, oferece o timbre perfeito para seu som. Desde sutis saturações até drives intensos, o Helios proporciona uma resposta dinâmica e orgânica. Com recursos únicos e versatilidade excepcional, é o pedal de overdrive ideal para elevar sua expressão musical.",
-                "product_image": "storage/app/pedalDois.png",
-                "avg_assessment": 5
+                "avg_assessment": 0
             },
             {
-                "id": 1,
-                "name": "Kailani Reverb",
-                "price": 1447,
-                "description": "Um reverb stereo de alta qualidade com uma ampla gama de opções de personalização para dar ao seu som a ambiência perfeita. Com oito modos de reverb diferentes, você pode escolher desde um ambiente natural e espaçoso até um efeito denso e imersivo.",
-                "product_image": "storage/app/pedalTres.png",
-                "avg_assessment": 4
+                "id": 3,
+                "avg_assessment": 0
             }
         ]
     }
