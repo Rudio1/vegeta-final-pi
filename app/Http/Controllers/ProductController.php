@@ -164,9 +164,9 @@ class ProductController extends Controller
     public function userProduct() : JsonResponse{
         try {
             $user = auth()->user();
-            $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id' )
+            $product = Product::join('product_selleds', 'products.id', '=', 'product_selleds.product_id')
                             ->where('product_selleds.user_id', $user->id)
-                            ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.product_image', 'product_selleds.serie_number', 'product_selleds.resale', 'product_selleds.buy_date')
+                            ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.product_image', 'products.link_manual', 'products.link_driver', 'product_selleds.serie_number', 'product_selleds.resale', 'product_selleds.buy_date')
                             ->get();
             if(!$product->isEmpty()){
                 return JsonResponseHelper::jsonResponse(['product' => $product]);
@@ -218,22 +218,28 @@ class ProductController extends Controller
         }    
     }
 
-    public function assessment() : JsonResponse {
-        $avg_assessment = Product::select('products.id', 'comments_posts.avg_assessment')
-        ->leftJoin('comments_posts', function ($join) {
+    public function assessment(int $productId) : JsonResponse {
+        $avg_assessment = Product::select('comments_posts.avg_assessment')
+        ->leftJoin('comments_posts', function ($join) use ($productId) {
             $join->on('comments_posts.product_id', '=', 'products.id')
                 ->where('comments_posts.created_at', '=', function ($select) {
                     $select->select(DB::raw('MAX(created_at)'))
                         ->from('comments_posts')
                         ->whereColumn('comments_posts.product_id', 'products.id');
                 });
-            })->get();
-            
-            foreach ($avg_assessment as $value) {
-                if(!$value->avg_assessment ? $value->avg_assessment =0.0 : $value->avg_assessment );
-            }
+        })
+        ->where('products.id', $productId)
+        ->first();
+    
+        if ($avg_assessment) {
+            $avg_assessment->avg_assessment = $avg_assessment->avg_assessment ? floatval($avg_assessment->avg_assessment) : 0.0;
+        }
 
-    return JsonResponseHelper::jsonResponse(['message' => $avg_assessment]);
+        return response()->json([
+            'success' => true,
+            'avg_assessment' => $avg_assessment ? $avg_assessment->avg_assessment : null
+        ]);
+    
     
     }
 }
