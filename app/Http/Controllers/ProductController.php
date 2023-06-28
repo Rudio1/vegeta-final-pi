@@ -118,9 +118,13 @@ class ProductController extends Controller
     public function updateComment(Request $request, int $id) : JsonResponse {
         try {
             $comment = Comments::findOrFail($id);
+            if(auth()->user()->id != $comment->user_id){
+                return JsonResponseHelper::jsonResponse(['message' => 'Você nao tem permissao para editar esse comentario'], 401);    
+            }
             $comment->comment = $request->input('comment') ?: $comment->comment;
+            $comment->assessment = $request->input('assessment') ?: $comment->assessment;
             $comment->save();
-            return JsonResponseHelper::jsonResponse( ['message'=>'Comentario de id '.  $comment->id. ' atualizado']);
+            return JsonResponseHelper::jsonResponse( ['message'=>'Comentario atualizado com sucesso!']);
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message'=>$th->getMessage(), 500]);
         }
@@ -129,9 +133,9 @@ class ProductController extends Controller
     public function deleteComment(int $id): JsonResponse {
         try {
             $user = auth()->user();
-            $comment = Comment::findOrFail($id);
+            $comment = Comments::findOrFail($id);
             if($user->id != $comment->user_id) {
-                return JsonResponseHelper::jsonResponse(['message' => 'Você nao tem permissao para deletar'], 401);    
+                return JsonResponseHelper::jsonResponse(['message' => 'Você nao tem permissao para deletar esse comentario'], 401);    
             }else {
                 $comment->delete();
                 return JsonResponseHelper::jsonResponse(['message' => 'Comentario deletado']);

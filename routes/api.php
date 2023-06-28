@@ -36,7 +36,7 @@ Route::middleware('jwt.auth')->group(function() {
     });
     Route::prefix('product')->group(function () {
         Route::post('/sell', [ProductController::class, 'selledProducts']); //Adiciona um produto vendido para um usuario
-        Route::get('/users/Product', [ProductController::class, 'userProduct']); //Retorna o produto por usuario
+        Route::get('/users-product', [ProductController::class, 'userProduct']); //Retorna o produto por usuario
         Route::delete('/{id}', [ProductController::class, 'deleteProduct']); //Remove o produto
         Route::post('/createProduct', [ProductController::class, 'createProduct']); //Cria o produto
         Route::put('/{id}', [ProductController::class, 'updateProduct']); //Atualiza os dados do produto

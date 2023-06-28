@@ -29,7 +29,6 @@ class TradeProductHelper
     }
 
     public function tradeProduct() {
-    
         try {
             $user = $this->auth->user();
             $newUser = User::where('email', $this->request->new_user)->firstOrFail();
@@ -43,7 +42,9 @@ class TradeProductHelper
                             ->first();
             
             if($currentProductId == null){
-                return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui o produto com esse numero de serie'], 404);
+                return JsonResponseHelper::jsonResponse(['message' => 'Você nao possui o produto com esse numero de serie'], 400);
+            }elseif ($user->email == $newUser->email) {
+                return JsonResponseHelper::jsonResponse(['message' => 'E-mail invalido, informe um e-mail diferente do seu!'], 400);
             }
 
             $historic = ProductSelled::select('id')->where('product_id', $currentProductId->id)
@@ -58,7 +59,7 @@ class TradeProductHelper
                     ->where('serie_number', $this->request->serie_number)
                     ->update(['user_id' => $newUser->id, 'resale' => 1]);
 
-            return JsonResponseHelper::jsonResponse(['message' => 'Produto Transferido com sucesso para o usuario ' . $newUser->name]);
+            return JsonResponseHelper::jsonResponse(['message' => 'Produto Transferido com sucesso para o usuario ' . $newUser->name . ' com sucesso!']);
             
         } catch (\Exception $th) {
             return JsonResponseHelper::jsonResponse(['message' => $th->getMessage()], 500);
